@@ -8,4 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Absensi extends Model
 {
     use HasFactory;
+    protected $table = 'absensi';
+    protected $fillable = ['jam_masuk', 'jam_keluar', 'durasi'];
+
+    public function krs()
+    {
+        return $this->belongsTo(Krs::class);
+    }
+
+    public function pertemuan()
+    {
+        return $this->belongsTo(Pertemuan::class);
+    }
 }
