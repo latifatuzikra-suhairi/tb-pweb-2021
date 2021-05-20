@@ -14,8 +14,8 @@ class MahasiswaController extends Controller
      */
     public function index()
     {   
-        $mahasiswa = \App\Models\Mahasiswa::all();
-        return view('mahasiswa.index', ['mahasiswa' => $mahasiswa]);
+        $mahasiswa = \App\Models\Mahasiswa::get();
+        return view('user.mahasiswa.index', ['mahasiswa' => $mahasiswa]);
     }
 
     /**

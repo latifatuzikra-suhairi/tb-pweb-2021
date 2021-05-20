@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Kelas;
 
 class KelasController extends Controller
 {
@@ -13,7 +14,8 @@ class KelasController extends Controller
      */
     public function index()
     {
-        //
+        $data_kelas = Kelas::all();
+        return view('user.kelas.index', ['data_kelas' => $data_kelas]);
     }
 
     /**

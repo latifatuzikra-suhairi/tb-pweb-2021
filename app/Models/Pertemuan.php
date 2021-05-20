@@ -9,7 +9,7 @@ class Pertemuan extends Model
 {
     use HasFactory;
     protected $table = 'pertemuan';
-    protected $fillable = ['pertemuan_ke', 'tanggal', 'materi'];
+    protected $fillable = ['kelas_id','pertemuan_ke', 'tanggal', 'materi'];
 
     public function kelas()
     {
