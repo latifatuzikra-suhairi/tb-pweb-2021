@@ -9,6 +9,7 @@ class Krs extends Model
 {
     use HasFactory;
     protected $table = 'krs';
+    protected $primaryKey = 'krs_id';
     protected $fillable = ['kelas_id', 'mahasiswa_id'];
 
     public function mahasiswa()

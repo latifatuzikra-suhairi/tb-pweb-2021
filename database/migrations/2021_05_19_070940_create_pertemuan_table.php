@@ -16,6 +16,7 @@ class CreatePertemuanTable extends Migration
         Schema::create('pertemuan', function (Blueprint $table) {
             $table->integer('pertemuan_id')->autoIncrement();
             $table->integer('kelas_id')->nullable($value=false);
+            $table->foreign('kelas_id')->references('kelas_id')->on('kelas');
             $table->integer('pertemuan_ke')->nullable($value=false);
             $table->date('tanggal')->nullable($value=false);
             $table->string('materi', 50)->nullable($value=true);

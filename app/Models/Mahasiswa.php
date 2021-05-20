@@ -9,10 +9,11 @@ class Mahasiswa extends Model
 {
     use HasFactory;
     protected $table = 'mahasiswa';
+    protected $primaryKey = 'mahasiswa_id';
     protected $fillable=['nama', 'nim', 'email', 'tipe', 'password'];
 
     public function krs()
     {
-        return $this->hasMany(Mahasiswa::class);
+        return $this->hasMany(Krs::class);
     }   
 }

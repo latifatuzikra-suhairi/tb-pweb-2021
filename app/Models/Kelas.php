@@ -9,6 +9,7 @@ class Kelas extends Model
 {
     use HasFactory;
     protected $table = 'kelas';
+    protected $primaryKey = 'kelas_id';
     protected $fillable = ['kode_kelas', 'kode_makul', 'nama_makul', 'tahun', 'semester', 'sks'];
 
     public function krs()
@@ -18,6 +19,6 @@ class Kelas extends Model
 
     public function pertemuan()
     {
-        return $this->hasMany(Kelas::class);
+        return $this->hasMany(Pertemuan::class);
     }   
 }

@@ -9,6 +9,7 @@ class Absensi extends Model
 {
     use HasFactory;
     protected $table = 'absensi';
+    protected $primaryKey = 'absensi_id';
     protected $fillable = ['krs_id','pertemuan_id','jam_masuk', 'jam_keluar', 'durasi'];
 
     public function krs()
