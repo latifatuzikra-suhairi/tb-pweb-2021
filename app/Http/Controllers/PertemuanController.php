@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Pertemuan;
+use Illuminate\Support\Facades\DB;
+
 
 class PertemuanController extends Controller
 {
@@ -33,8 +36,22 @@ class PertemuanController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        Pertemuan::create($request->all());
+        // $data = $request->input();
+        // $pertemuan = new Pertemuan;
+        // $pertemuan->kelas_id = $data['kelas_id'];
+        // $pertemuan->pertemuan_ke = $data['pertemuan_ke'];
+        // $pertemuan->tanggal= $data['tanggal'];
+        // $pertemuan->materi = $data['materi'];
+
+        // if($pertemuan->save()){
+        //     return redirect('/kelas/{$pertemuan->kelas_id}/detail')->with(['psn_sukses' => 'Data Pertemuan Berhasil Ditambahkan!']);
+        // }
+        // else{
+        //     return redirect('/kelas/{$pertemuan->kelas_id}/detail')->with(['psn_gagal' => 'Data Pertemuan Gagal Ditambahkan!']);
+        // }
+        
     }
 
     /**
@@ -43,9 +60,15 @@ class PertemuanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function push($kelas_id, $pertemuan_id)
     {
-        //
+        dd($kelas_id);
+        $detail_pertemuan = DB::table('pertemuan')
+                                ->where('pertemuan_id', $pertemuan_id)
+                                ->where('kelas_id', $kelas_id)
+                                ->get();
+
+        return view('admin.pertemuan.detail', compact($detail_pertemuan));
     }
 
     /**

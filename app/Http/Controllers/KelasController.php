@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Kelas;
+use App\Models\Pertemuan;
 
 class KelasController extends Controller
 {
@@ -15,7 +16,7 @@ class KelasController extends Controller
     public function index()
     {
         $data_kelas = Kelas::all();
-        return view('user.kelas.index', ['data_kelas' => $data_kelas]);
+        return view('admin.kelas.index', ['data_kelas' => $data_kelas]);
     }
 
     /**
@@ -45,9 +46,11 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show_detail_kelas($kelas_id)
     {
-        //
+        $data_kelas = Kelas::find($kelas_id);
+        $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert'));
     }
 
     /**

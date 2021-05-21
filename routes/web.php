@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\PertemuanController;
+use App\Models\Pertemuan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +22,9 @@ Route::get('/', function () {
 });
 
 Route::get('/kelas',[KelasController::class, 'index']); //daftar kelas
-Route::get('/kelas/detail',[KelasController::class, 'show']); //detail kelas
+Route::get('/kelas/{kelas_id}/detail', [KelasController::class, 'show_detail_kelas']); //info detail kelas
+Route::get('/kelas/{kelas_id}/detail/pertemuan/{pertemuan_id}', [Pertemuan::class, 'push'])->name('detail.pertemuan'); //info pertemuan
 
-Route::get('/mahasiswa', [MahasiswaController::class, 'index']); //mahasiswa
+Route::post('/pertemuan/store', [PertemuanController::class, 'store']); //tambah pertemuan
+
+Route::get('/mahasiswa',[MahasiswaController::class, 'index']); //mahasiswa

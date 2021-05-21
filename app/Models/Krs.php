@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Krs extends Model
 {
     use HasFactory;
+    public $timestamp = false;
     protected $table = 'krs';
     protected $primaryKey = 'krs_id';
     protected $fillable = ['kelas_id', 'mahasiswa_id'];
