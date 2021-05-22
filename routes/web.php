@@ -28,3 +28,11 @@ Route::get('/kelas/{kelas_id}/detail/pertemuan/{pertemuan_id}', [Pertemuan::clas
 Route::post('/pertemuan/store', [PertemuanController::class, 'store']); //tambah pertemuan
 
 Route::get('/mahasiswa',[MahasiswaController::class, 'index']); //mahasiswa
+Route::get('/mahasiswa/create', [MahasiswaController::class, 'create']); //tambah mahasiswa
+//Route::get('/mahasiswa/{kelas_id}/detail/pertemuan/{mahasiswa_id}', [Mahasiswa::class, 'push'])->name('detail.pertemuan'); //info pertemuan
+Route::post('/mahasiswa/store', [MahasiswaController::class, 'store']); //tambah mahasiswa
+
+Route::delete('/mahasiswa/{mahasiswa_id}/destroy', [MahasiswaController::class, 'destroy']); //hapus mahasiswa
+//Route::post('/mahasiswa/{mahasiswa_id}/update', [MahasiswaController::class, 'update']); //hapus mahasiswa
+Route::get('/mahasiswa/{mahasiswa_id}/edit', [MahasiswaController::class, 'edit']); //info detail kelas
+Route::match(['get', 'post'], '/mahasiswa/{mahasiswa_id}/update', [MahasiswaController::class, 'update']);

@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Mahasiswa extends Model
 {
     use HasFactory;
-    public $timestamp = false;
+
+    public $timestamps = false;
     protected $table = 'mahasiswa';
     protected $primaryKey = 'mahasiswa_id';
     protected $fillable=['nama', 'nim', 'email', 'tipe', 'password'];

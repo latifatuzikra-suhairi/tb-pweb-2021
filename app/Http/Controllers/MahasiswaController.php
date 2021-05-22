@@ -15,8 +15,9 @@ class MahasiswaController extends Controller
      */
     public function index()
     {   
-        $mahasiswa = Mahasiswa::get();
-        return view('admin.mahasiswa.index', ['mahasiswa' => $mahasiswa]);
+        $mahasiswa = Mahasiswa::paginate(10);
+        return view('admin.mahasiswa.index', ['data_mahasiswa' => $mahasiswa], ['data_mahasiswa' => DB::table('mahasiswa')->paginate(15)]);
+
     }
 
     /**
@@ -26,7 +27,7 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.mahasiswa.create');
     }
 
     /**
@@ -37,7 +38,22 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama' => 'required',
+            'nim' => 'required',
+            'email' => 'required',
+            'tipe' => 'required',
+            'password' => 'required',
+        ], [
+            'nama.required' => 'Nama tidak boleh kosong',
+            'nim.required' => 'NIM tidak boleh kosong',
+            'email.required' => 'Email tidak boleh kosong',
+            'tipe.required' => 'Tipe tidak boleh kosong',
+            'password.required' => 'Password tidak boleh kosong',
+        ]);
+
+        Mahasiswa::create($request->all());
+        return redirect('/mahasiswa')->with('status', 'Data Mahasiswa Berhasil Ditambahkan');
     }
 
     /**
@@ -46,10 +62,19 @@ class MahasiswaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($mahasiswa_id)
     {
         //
     }
+
+    // public function push($mahasiswa_id)
+    // {
+    //     dd($mahasiswa_id);
+    //     $mahasiswa = DB::table('pertemuan')
+    //                                ->get();
+
+    //     return view('admin.mahasiswa.index', compact($mahasiswa));
+    // }
 
     /**
      * Show the form for editing the specified resource.
@@ -57,9 +82,11 @@ class MahasiswaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($mahasiswa_id)
     {
-        //
+        $data_mahasiswa = Mahasiswa::find($mahasiswa_id);
+        return view('admin.mahasiswa.edit', compact('data_mahasiswa'));
+
     }
 
     /**
@@ -69,10 +96,37 @@ class MahasiswaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $mahasiswa_id)
     {
-        //
+
+        $request->validate([
+            'nama' => 'required',
+            'nim' => 'required',
+            'email' => 'required',
+            'tipe' => 'required',
+            'password' => 'required',
+        ], [
+            'nama.required' => 'Nama tidak boleh kosong',
+            'nim.required' => 'NIM tidak boleh kosong',
+            'email.required' => 'Email tidak boleh kosong',
+            'tipe.required' => 'Tipe tidak boleh kosong',
+            'password.required' => 'Password tidak boleh kosong',
+        ]);
+
+        if($request->isMethod('post')){
+            $data_mahasiswa = $request->all();  
+
+            Mahasiswa::where(['mahasiswa_id'=> $mahasiswa_id])->update(['nama'=>$data_mahasiswa['nama'], 'nim'=>$data_mahasiswa['nim'], 'email'=>$data_mahasiswa['email'], 'tipe'=>$data_mahasiswa['tipe'], 'password'=>$data_mahasiswa['password']]);
+            return redirect('/mahasiswa')->with('status', 'Data Mahasiswa Berhasil Diubah');
+
+        }
     }
+
+    // public function edit(Request $request, $mahasiswa_id)
+    // {
+        
+    // }
+
 
     /**
      * Remove the specified resource from storage.
@@ -80,9 +134,13 @@ class MahasiswaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($mahasiswa_id)
     {
-        //
+        // Mahasiswa::destroy($mahasiswa->mahasiswa_id);
+        $mahasiswa = Mahasiswa::find($mahasiswa_id);
+        $mahasiswa->delete();
+        return redirect('/mahasiswa')->with('status', 'Data Mahasiswa Berhasil Dihapus');
+
     }
 
 }
