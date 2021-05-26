@@ -46,9 +46,9 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show_detail_kelas($kelas_id)
+    public function show($kelas_id)
     {
-        $data_kelas = Kelas::find($kelas_id);
+        $data_kelas = Kelas::findOrFail($kelas_id);
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
         return view('admin.kelas.detail', compact('data_kelas', 'data_pert'));
     }

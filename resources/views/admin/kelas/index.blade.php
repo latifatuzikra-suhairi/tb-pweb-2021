@@ -35,7 +35,7 @@
             <td>{{ $kelas->tahun }}</td>
             <td>{{ $kelas->semester }}</td>
             <td>
-              <a href="/kelas/{{ $kelas->kelas_id }}/detail" class="btn btn-primary">Detail</a>
+              <a href="{{ route('detail.kelas', [$kelas->kelas_id]) }}" class="btn btn-primary">Detail</a>
               <a href="" class="btn btn-primary">Edit</a>
             </td>
           </tr>

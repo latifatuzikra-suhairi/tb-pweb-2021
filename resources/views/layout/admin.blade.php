@@ -20,7 +20,7 @@
   </head>
   <body>
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light sticky-top" style="z-index: 1;">
+    <nav class="navbar navbar-expand-lg navbar-light" style="z-index: 1;">
       <div class="container">
          <a class="navbar-brand" href="/" style="font-family: Viga; font-size: 32px;">SIRAH</a>
          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,6 +51,7 @@
     </nav>
     <!-- Akhir Navbar -->
 
+    @yield('breadcrumbs')
     @yield('content')
 
     <!-- Footer -->

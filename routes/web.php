@@ -22,17 +22,18 @@ Route::get('/', function () {
 });
 
 Route::get('/kelas',[KelasController::class, 'index']); //daftar kelas
-Route::get('/kelas/{kelas_id}/detail', [KelasController::class, 'show_detail_kelas']); //info detail kelas
-Route::get('/kelas/{kelas_id}/detail/pertemuan/{pertemuan_id}', [Pertemuan::class, 'push'])->name('detail.pertemuan'); //info pertemuan
+Route::get('/kelas/{kelas_id}', [KelasController::class, 'show'])->name('detail.kelas'); //info detail kelas
+Route::get('/kelas/{kelas_id}/pertemuan/{pertemuan_id}', [PertemuanController::class, 'index'])->name('detail.pertemuan'); //info detail pertemuan
+Route::get('/pertemuan/{kelas_id}/create', [PertemuanController::class, 'create'])->name('tambah.pertemuan'); //tambah pertemuan
+Route::post('/pertemuan/{kelas_id}/store', [PertemuanController::class, 'store'])->name('simpan.pertemuan'); //tambah pertemuan
 
-Route::post('/pertemuan/store', [PertemuanController::class, 'store']); //tambah pertemuan
+//Route::post('/kelas/{kelas_id}/pertemuan/{pertemuan_id}/upload', [PertemuanController::class, 'upload'])->name('upload.pertemuan'); //upload file pertemuan
+
+
 
 Route::get('/mahasiswa',[MahasiswaController::class, 'index']); //mahasiswa
 Route::get('/mahasiswa/create', [MahasiswaController::class, 'create']); //tambah mahasiswa
-//Route::get('/mahasiswa/{kelas_id}/detail/pertemuan/{mahasiswa_id}', [Mahasiswa::class, 'push'])->name('detail.pertemuan'); //info pertemuan
 Route::post('/mahasiswa/store', [MahasiswaController::class, 'store']); //tambah mahasiswa
-
 Route::delete('/mahasiswa/{mahasiswa_id}/destroy', [MahasiswaController::class, 'destroy']); //hapus mahasiswa
-//Route::post('/mahasiswa/{mahasiswa_id}/update', [MahasiswaController::class, 'update']); //hapus mahasiswa
 Route::get('/mahasiswa/{mahasiswa_id}/edit', [MahasiswaController::class, 'edit']); //info detail kelas
 Route::match(['get', 'post'], '/mahasiswa/{mahasiswa_id}/update', [MahasiswaController::class, 'update']);

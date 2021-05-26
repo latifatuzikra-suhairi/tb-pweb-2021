@@ -8,146 +8,121 @@
 </style>
 @section('title', 'SIRAH | Detail Kelas')
 
-@section('content')
-    <div class="container">
-        <h1>Daftar Kelas</h1>
+@section('breadcrumbs')
+<div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/kelas">Kelas</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Detail Kelas</li>
+        </ol>
+    </nav>
+</div>
+@endsection
 
-        @if(session('psn_sukses')){
+@section('content')
+    <div class="container mt-5">
+        <div class="wrap container shadow-lg p-5" style="background-color:white; border-radius:10px">
+        
+        @if(session('psn_sukses'))
             <div class="alert alert-success" role="alert">
                 {{ session('psn_sukses') }}
             </div>
-        }   
-        @elseif(session('psn_gagal')){
+        @elseif(session('psn_gagal'))
             <div class="alert alert-danger" role="alert">
                 {{ session('psn_gagal') }}
             </div> 
-        }
         @endif
 
-        {{-- Detail Daftar Kelas --}}
-        <div class="row">
-            <div class="col-4 form-group">
-                <label for="kode-kelas">Kode Kelas</label>
-                <input type="text" readonly class="form-control" id="kode-kelas" 
-                    name="kode_kelas" value="{{$data_kelas->kode_kelas}}">
-            </div>
-            <div class="col-4 form-group">
-                <label for="kode-matakul">Kode Mata Kuliah</label>
-                <input type="text" readonly class="form-control" id="kode-matakul" \
-                    name="kode_makul" value="{{$data_kelas->kode_makul}}">
-            </div>
-            <div class="col-4 form-group">
-                <label for="nama-makul">Nama Mata Kuliah</label>
-                <input type="text" readonly class="form-control" id="nama-matakul" 
-                    name="nama_makul" value="{{$data_kelas->nama_makul}}">
-            </div>
+        <!---- Detail Daftar Kelas ---->
+        <div class="border-bottom"><p>
+            <h2><b>{{ $data_kelas->nama_makul }}</b></h2>
+             - {{ $data_kelas->kode_makul }}</p>
+        </div>
+        
+        <div>
+            <table class="table table-borderless" style="width:70%">
+                <tr>
+                    <td>Kode Kelas</td>
+                    <td>:</td>
+                    <td>{{ $data_kelas->kode_kelas }}</td>
+                    <td></td>
+                    <td>Semester</td>
+                    <td>:</td>
+                    @if($data_kelas->tahun == 1)
+                        <td>{{ "Ganjil" }}</td>
+                    @else
+                        <td>{{ "Genap" }}</td>
+                    @endif 
+                </tr>
+                <tr>
+                    <td>Tahun</td>
+                    <td>:</td>
+                    <td>{{ $data_kelas->tahun }}</td>
+                    <td></td>
+                    <td>SKS</td>
+                    <td>:</td>
+                    <td>{{ $data_kelas->sks }} SKS</td>
+                </tr>
+            </table>
         </div>
 
-        {{-- Data Mahasiswa Yang Mengikuti Kelas --}}
+        <!---- Data Mahasiswa Yang Mengikuti Kelas ---->
         <div class="card mb-3">
         <div class="card-header" id="headingOne">
         <div class="row">
             <div class="col-6">
-                <h5 class="mb-0">Data Mahasiswa Kelas</h5>
+                <h5 class="mb-0">Data Mahasiswa</h5>
             </div>
             <div class="col-6">
                 <h5 class="mb-0">
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1">Toggle second element</button>
+                    <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1">v</button>
                 </h5>
             </div>
         </div>
         </div>
         <div id="multiCollapse1" class="collapse multi-collapse">
             <div class="card-body">
-                <p>Isi Disini</p>
+                <p></p>
             </div>
         </div>
         </div>
 
-        {{-- Data Pertemuan --}}
+        <!---- Data Pertemuan ---->
         <div class="card">
             <div class="card-header" id="headingOne">
             <div class="row">
                 <div class="col-6">
-                    <h5 class="mb-0">Data Pertemuan</h5>
+                    <h5 class="mb-0">Data Pertemuan<img style="margin-bottom:3px; margin-left:10px" src="../img/pertemuan.png"></h5>
                 </div>
                 <div class="col-6">
                     <h5 class="mb-0">
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2">Toggle second element</button>
+                        <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2">v</button>
                     </h5>
                 </div>
             </div>
             </div>
             <div id="multiCollapse2" class="collapse multi-collapse">
-                <div class="card-body">
-                    <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#exampleModal">Tambah Pertemuan</button>
+                <div class="card-body" id="addPertemuan">
+                    <a type="button" class="btn btn-primary mb-3" href="{{ route('tambah.pertemuan', [$data_kelas->kelas_id]) }}">Tambah Pertemuan</a>
                     <div class="row">
                         @forelse ($data_pert as $pert)
                         <div class="col-sm-3">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title border-bottom">Pertemuan {{ $pert['pertemuan_ke'] }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Tanggal : {{ $pert['tanggal'] }}</h6>
-                                    <a href="{{route('detail.pertemuan', ['kelas_id'=>$data_kelas->kelas_id,'pertemuan_id'=>$pert['pertemuan_id']])}}" class="card-link">Lihat Pertemuan >></a>
+                                    <p class="card-subtitle mb-2 text-muted" style="font-size: 12px">Tanggal : {{ date('d M Y', strtotime($pert['tanggal'])) }}</p>
+                                    <a href="{{ route('detail.pertemuan', [$data_kelas->kelas_id, $pert['pertemuan_id']]) }}" class="card-link">Lihat Pertemuan >></a>
                                 </div>
                               </div>
                         </div> 
                         @empty
-                            <h6 class="mx-auto">Pertemuan Belum Dilakukan!</h6>
+                            <h6 class="mx-auto" style="color: silver">Belum Ada Pertemuan!</h6>
                         @endforelse
                     </div>
                 </div>
             </div>
             </div>
-
-    
-            
-
-
-
-
-        <!-- Modal Tambah Pertemuan -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Pertemuan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form action="/pertemuan/store" method="POST">
-                        @csrf
-                        <input type="hidden" class="form-control" id="exampleFormControlInput1" value="{{$data_kelas->kelas_id}}" name="kelas_id">
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Pertemuan Ke-</label>
-                        <select class="custom-select form-control" id="exampleFormControlSelect1" name="pertemuan_ke"
-                            onmousedown="if(this.options.length>5){this.size=5;}" 
-                            onchange='this.size=0;' onblur="this.size=0;">
-                            <option selected disabled>--Pilih Pertemuan Ke--</option>
-                            $pert = 1;
-                            @for ($pert = 1; $pert < 17; $pert++)
-                            <option>{{$pert}}</option>
-                             @endfor
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlInput1">Tanggal Pertemuan</label>
-                        <input type="date" class="form-control" id="exampleFormControlInput1" name="tanggal">
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlTextarea1">Materi</label>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" style="resize: none" name="materi"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary">Tambah</button>
-                </div>
-                    </form>
-            </div>
-            </div>
         </div>
-
     </div>
 @endsection
