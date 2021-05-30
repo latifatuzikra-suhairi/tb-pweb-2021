@@ -49,7 +49,7 @@
                     <td></td>
                     <td>Semester</td>
                     <td>:</td>
-                    @if($data_kelas->tahun == 1)
+                    @if($data_kelas->semester == 1)
                         <td>{{ "Ganjil" }}</td>
                     @else
                         <td>{{ "Genap" }}</td>
@@ -69,23 +69,38 @@
 
         <!---- Data Mahasiswa Yang Mengikuti Kelas ---->
         <div class="card mb-3">
-        <div class="card-header" id="headingOne">
-        <div class="row">
-            <div class="col-6">
-                <h5 class="mb-0">Data Mahasiswa</h5>
+            <div class="card-header" id="headingOne" style="background-color: rgb(204, 207, 215, 0.3)">
+            <div class="row">
+                <div class="col-9">
+                    <p class="mb-0" style="font-size: 17px; font-weight:600; color:#112c66;">Data Mahasiswa</p>
+                </div>
+                <div class="col-3">
+                    <p class="mb-0">
+                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:70%" src="../img/dropdown.png"></button>
+                    </p>
+                </div>
             </div>
-            <div class="col-6">
-                <h5 class="mb-0">
-                    <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1">v</button>
-                </h5>
             </div>
-        </div>
-        </div>
-        <div id="multiCollapse1" class="collapse multi-collapse">
-            <div class="card-body">
-                <p></p>
+            <div id="multiCollapse1" class="collapse multi-collapse">
+                <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
+                    <a type="button" class="btn btn-primary mb-3" href="{{ route('tambah.peserta', [$data_kelas->kelas_id]) }}">Tambah Peserta Kelas</a>
+                    <div class="table-responsive">
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr style="font-size: 16px">
+                                <th class="text-center" scope="col">#</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">NIM</th>
+                                <th class="text-center" scope="col">Kelola</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
 
         <!---- Data Pertemuan ---->

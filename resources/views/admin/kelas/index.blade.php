@@ -14,10 +14,20 @@
         <h1>Daftar Kelas</h1>
 
         {{-- Btn Tambah Kelas --}}
-        <button class="mb-4">Tambah Kelas</button>
+        <a href="/kelas/create" class="btn btn-primary" >Tambah Kelas</a>
+        <br>
+        @if (session('status'))
+        <br>
+            <div class="alert alert-success">
+                {{ session('status')}}
+            </div>
+        @endif 
 
         {{-- Table Kelas --}}
-        <table class="table table-striped table-hover">
+        <br>
+        <div class="card mb-4">
+          <div class="card-body">
+            <table class="table table-bordered dataTabel">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -30,17 +40,29 @@
         <tbody>
           @foreach ($data_kelas as $kelas)
           <tr>
-            <th scope="row">1</th>
+            <th scope="row">{{ $loop->iteration }}</th>
             <td>{{ $kelas->kode_kelas }}</td>
             <td>{{ $kelas->tahun }}</td>
             <td>{{ $kelas->semester }}</td>
             <td>
-              <a href="{{ route('detail.kelas', [$kelas->kelas_id]) }}" class="btn btn-primary">Detail</a>
-              <a href="" class="btn btn-primary">Edit</a>
+              <a href="/kelas/{{ $kelas->kelas_id }}/detail" class="btn btn-info">Detail</a>
+              <a href="/kelas/{{ $kelas->kelas_id }}/edit" class="btn btn-primary">Edit</a>
+              <!--<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$kelas->kelas_id}}">Hapus</a>-->
+            
+              <!-- <form action="/kelas/{{ $kelas->kelas_id }}/destroy" method="post" class="d-inline">
+                @method('delete')
+                    @csrf
+                    <button type="submit" class="btn btn-danger">Hapus</button>
+                </form> -->
+                <!-- <a href="/kelas/{{ $kelas->kelas_id }}/destroy" class="btn btn-danger">Hapus</a> -->
             </td>
+            @include('admin.kelas.delete')
           </tr>
           @endforeach
         </tbody>
-      </table>
+      </table> 
+      </div>
     </div>
+  </div>
+    
 @endsection
