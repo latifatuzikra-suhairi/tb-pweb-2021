@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Kelas extends Model
 {
     use HasFactory;
-    public $timestamp = false;
+    public $timestamps = false;
     protected $table = 'kelas';
     protected $primaryKey = 'kelas_id';
     protected $fillable = ['kode_kelas', 'kode_makul', 'nama_makul', 'tahun', 'semester', 'sks'];
