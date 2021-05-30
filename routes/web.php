@@ -3,6 +3,7 @@
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PertemuanController;
+use App\Http\Controllers\KrsController;
 use App\Models\Pertemuan;
 use Illuminate\Support\Facades\Route;
 
@@ -36,3 +37,9 @@ Route::delete('/mahasiswa/{mahasiswa_id}/destroy', [MahasiswaController::class, 
 //Route::post('/mahasiswa/{mahasiswa_id}/update', [MahasiswaController::class, 'update']); //hapus mahasiswa
 Route::get('/mahasiswa/{mahasiswa_id}/edit', [MahasiswaController::class, 'edit']); //info detail kelas
 Route::match(['get', 'post'], '/mahasiswa/{mahasiswa_id}/update', [MahasiswaController::class, 'update']);
+
+// Route::get('/', function () {
+//     return view('user.dashboard');
+// });
+Route::get('/krs',[KrsController::class, 'index']); //daftar kelas berdasarkan KRS
+Route::get('/krs/{kelas_id}/detail', [KrsController::class, 'show_detail']); //info detail kelas

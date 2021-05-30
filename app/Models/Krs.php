@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Krs extends Model
 {
     use HasFactory;
-    public $timestamp = false;
+    public $timestamps = false;
     protected $table = 'krs';
     protected $primaryKey = 'krs_id';
     protected $fillable = ['kelas_id', 'mahasiswa_id'];
