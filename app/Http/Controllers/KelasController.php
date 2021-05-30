@@ -26,7 +26,7 @@ class KelasController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.kelas.create');
     }
 
     /**
@@ -37,7 +37,24 @@ class KelasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode_kelas' => 'required',
+            'kode_makul' => 'required',
+            'nama_makul' => 'required',
+            'tahun' => 'required',
+            'semester' => 'required',
+            'sks' => 'required',
+        ], [
+            'kode_kelas.required' => 'Kode Kelas tidak boleh kosong',
+            'kode_makul.required' => 'Kode Makul tidak boleh kosong',
+            'nama_makul.required' => 'Nama Makul tidak boleh kosong',
+            'tahun.required' => 'Tahun tidak boleh kosong',
+            'semester.required' => 'Semester tidak boleh kosong',
+            'sks.required' => 'Sks tidak boleh kosong',
+        ]);
+
+        Kelas::create($request->all());
+        return redirect('/kelas')->with('status', 'Data Kelas Berhasil Ditambahkan');
     }
 
     /**
@@ -46,9 +63,9 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show_detail_kelas($kelas_id)
+    public function show($kelas_id)
     {
-        $data_kelas = Kelas::find($kelas_id);
+        $data_kelas = Kelas::findOrFail($kelas_id);
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
         return view('admin.kelas.detail', compact('data_kelas', 'data_pert'));
     }
@@ -59,9 +76,10 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($kelas_id)
     {
-        //
+        $data_kelas = Kelas::find($kelas_id);
+        return view('admin.kelas.edit', compact('data_kelas'));
     }
 
     /**
@@ -71,9 +89,30 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $kelas_id)
     {
-        //
+        $request->validate([
+            'kode_kelas' => 'required',
+            'kode_makul' => 'required',
+            'nama_makul' => 'required',
+            'tahun' => 'required',
+            'semester' => 'required',
+            'sks' => 'required',
+        ], [
+            'kode_kelas.required' => 'Kode Kelas tidak boleh kosong',
+            'kode_makul.required' => 'Kode Makul tidak boleh kosong',
+            'nama_makul.required' => 'Nama Makul tidak boleh kosong',
+            'tahun.required' => 'Tahun tidak boleh kosong',
+            'semester.required' => 'Semester tidak boleh kosong',
+            'sks.required' => 'Sks tidak boleh kosong',
+        ]);
+
+        if($request->isMethod('post')){
+            $data_kelas = $request->all();  
+
+            Kelas::where(['kelas_id'=> $kelas_id])->update(['kode_kelas'=>$data_kelas['kode_kelas'], 'kode_makul'=>$data_kelas['kode_makul'], 'nama_makul'=>$data_kelas['nama_makul'], 'tahun'=>$data_kelas['tahun'], 'semester'=>$data_kelas['semester'], 'sks'=>$data_kelas['sks']]);
+            return redirect('/kelas')->with('status', 'Data Kelas Berhasil Diubah');
+            }
     }
 
     /**
@@ -82,8 +121,10 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($kelas_id)
     {
-        //
+        $data_kelas = Kelas::find($kelas_id);
+        $data_kelas->delete();
+        return redirect('/kelas')->with('status', 'Data Kelas Berhasil Dihapus');
     }
 }

@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pertemuan;
-use Illuminate\Support\Facades\DB;
-
+use App\Models\Kelas;
+use App\Models\Absensi;
+use App\Models\Mahasiswa;
 
 class PertemuanController extends Controller
 {
@@ -14,9 +15,23 @@ class PertemuanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($kelas_id, $pertemuan_id)
     {
-        //
+        $kelas = Kelas::findOrFail($kelas_id);
+        $pertemuan = Pertemuan::findOrFail($pertemuan_id);
+
+        // $datas = Mahasiswa::join('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+        //                     ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
+        //                     ->leftjoin('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
+        //                     ->leftjoin('pertemuan', 'absensi.pertemuan_id', '=', 'pertemuan.pertemuan_id')
+        //                     ->where('absensi.kelas_id', $kelas_id)
+        //                     ->get();
+
+        $datas = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                            ->leftjoin('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
+                            ->get();
+        //view('admin.pertemuan.detail', compact('datas', 'kelas', 'pertemuan'));                          
+        return dd($datas);
     }
 
     /**
@@ -24,9 +39,9 @@ class PertemuanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create($kelas_id)
+    {   
+        return view('admin.pertemuan.tambah', compact('kelas_id'));
     }
 
     /**
@@ -37,21 +52,34 @@ class PertemuanController extends Controller
      */
     public function store(Request $request)
     {   
-        Pertemuan::create($request->all());
-        // $data = $request->input();
-        // $pertemuan = new Pertemuan;
-        // $pertemuan->kelas_id = $data['kelas_id'];
-        // $pertemuan->pertemuan_ke = $data['pertemuan_ke'];
-        // $pertemuan->tanggal= $data['tanggal'];
-        // $pertemuan->materi = $data['materi'];
+        $request->validate([
+            'pertemuan_ke' => 'required',
+            'tanggal' => 'required',
+            'materi' => 'max:70'
+        ], [
+            'pertemuan_ke.required' => 'Pertemuan tidak boleh kosong',
+            'tanggal.required' => 'Tanggal Pertemuan tidak boleh kosong',
+            'materi.max' => 'Maksimal penjabaran materi hanya 70 Karakter'
+        ]);
 
-        // if($pertemuan->save()){
-        //     return redirect('/kelas/{$pertemuan->kelas_id}/detail')->with(['psn_sukses' => 'Data Pertemuan Berhasil Ditambahkan!']);
-        // }
-        // else{
-        //     return redirect('/kelas/{$pertemuan->kelas_id}/detail')->with(['psn_gagal' => 'Data Pertemuan Gagal Ditambahkan!']);
-        // }
-        
+        //cek udah ada pertemuan yang dimaksud atau belum
+        $cek = Pertemuan::where('kelas_id', $request->kelas_id)
+                            ->where('pertemuan_ke', $request->pertemuan_ke)
+                            ->doesntExist();
+        if($cek == true)
+        {
+             if(Pertemuan::create($request->all()))
+             {
+                 return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_sukses', 'Pertemuan Berhasil Ditambahkan!');
+             }
+             else
+             {
+                 return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Pertemuan Gagal Ditambahkan!');
+             }
+        }
+        else{
+            return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Pertemuan ke-'.$request->pertemuan_ke.' telah diadakan!');
+        }
     }
 
     /**
@@ -60,15 +88,9 @@ class PertemuanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function push($kelas_id, $pertemuan_id)
+    public function show()
     {
-        dd($kelas_id);
-        $detail_pertemuan = DB::table('pertemuan')
-                                ->where('pertemuan_id', $pertemuan_id)
-                                ->where('kelas_id', $kelas_id)
-                                ->get();
-
-        return view('admin.pertemuan.detail', compact($detail_pertemuan));
+        //
     }
 
     /**
@@ -82,26 +104,4 @@ class PertemuanController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
