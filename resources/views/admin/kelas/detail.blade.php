@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-3">
                     <p class="mb-0">
-                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:70%" src="../img/dropdown.png"></button>
+                        <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1">v</button>
                     </p>
                 </div>
             </div>
@@ -108,7 +108,7 @@
             <div class="card-header" id="headingOne">
             <div class="row">
                 <div class="col-6">
-                    <h5 class="mb-0">Data Pertemuan<img style="margin-bottom:3px; margin-left:10px" src="../img/pertemuan.png"></h5>
+                    <h5 class="mb-0">Data Pertemuan<img style="margin-bottom:3px; margin-left:10px" src=".../img/pertemuan.png"></h5>
                 </div>
                 <div class="col-6">
                     <h5 class="mb-0">
