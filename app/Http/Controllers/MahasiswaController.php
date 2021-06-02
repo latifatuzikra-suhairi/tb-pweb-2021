@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Mahasiswa;
+use App\Models\User;
 
 class MahasiswaController extends Controller
 {
@@ -38,20 +39,27 @@ class MahasiswaController extends Controller
      */
     public function store(Request $request)
     {
+        
         $request->validate([
             'nama' => 'required',
             'nim' => 'required',
             'email' => 'required',
-            'tipe' => 'required',
-            'password' => 'required',
         ], [
             'nama.required' => 'Nama tidak boleh kosong',
             'nim.required' => 'NIM tidak boleh kosong',
             'email.required' => 'Email tidak boleh kosong',
-            'tipe.required' => 'Tipe tidak boleh kosong',
-            'password.required' => 'Password tidak boleh kosong',
         ]);
 
+        $user = new User;
+        $user->role = 'mahasiswa';
+        $user->username = $request->nim;
+        $user->name = $request->nama;
+        $user->email = $request->email;
+        $user->password = bcrypt('1234');
+        $user->remember_token = str_random(60);
+        $user->save();
+
+        $request->request->add(['user_id' => $user->id]);
         Mahasiswa::create($request->all());
         return redirect('/mahasiswa')->with('status', 'Data Mahasiswa Berhasil Ditambahkan');
     }

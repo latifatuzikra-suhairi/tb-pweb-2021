@@ -37,8 +37,6 @@
             <th scope="col">Nama</th>
             <th scope="col">NIM</th>
             <th scope="col">Email</th>
-            <th scope="col">Tipe</th>
-            <th scope="col">Password</th>
             <th scope="col">Aksi</th>
           </tr>
         </thead>
@@ -49,8 +47,6 @@
             <td>{{ $mahasiswa->nama }}</td>
             <td>{{ $mahasiswa->nim }}</td>
             <td>{{ $mahasiswa->email }}</td>
-            <td>{{ $mahasiswa->tipe }}</td>
-            <td>{{ $mahasiswa->password }}</td>
             <td>
 
             <!-- <form action="/mahasiswa/{{ $mahasiswa->mahasiswa_id }}/update" method="post">

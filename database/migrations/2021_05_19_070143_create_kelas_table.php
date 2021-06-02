@@ -18,8 +18,8 @@ class CreateKelasTable extends Migration
             $table->string('kode_kelas', 50)->nullable($value=false);
             $table->string('kode_makul', 50)->nullable($value=false);
             $table->string('nama_makul', 50)->nullable($value=false);
-            $table->integer('tahun')->nullable($value=true);
-            $table->integer('semester')->nullable($value=true);
+            $table->integer('tahun')->nullable($value=false);
+            $table->integer('semester')->nullable($value=false);
             $table->integer('sks')->nullable($value=false);
         });
     }

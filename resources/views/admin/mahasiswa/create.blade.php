@@ -35,17 +35,6 @@
                         <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan email" id="email" name="email" value="{{old('email')}}"> 
                         @error ('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="form-group">
-                        <label for="tipe">Tipe</label>
-                        <input type="text" class="form-control @error('tipe') is-invalid @enderror" placeholder="Masukkan tipe" id="tipe" name="tipe" value="{{old('tipe')}}"> 
-                        @error ('tipe')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="text" class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password" id="password" name="password" value="{{old('password')}}"> 
-                        @error ('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                           
                 <button type="submit" class="btn btn-primary">Tambah Data</button>
                 </form>  
         </div>

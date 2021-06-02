@@ -38,7 +38,24 @@
                     </div>
                     <div class="form-group">
                         <label for="tahun">Tahun</label>
-                        <input type="text" class="form-control @error('tahun') is-invalid @enderror" placeholder="Masukkan Tahun" id="tahun" name="tahun" value="{{ $data_kelas->tahun }}"> 
+                        <select id="tahun" class="form-control @error('tahun') is-invalid @enderror" name="tahun">
+                            <option value="">-Pilih Tahun Kelas-</option>
+                            <?php
+                                $thn_skr = date('Y');
+                                for ($x = $thn_skr; $x >= 2010; $x--) {
+                                    if($data_kelas->tahun  == $x )
+                                    {
+                            ?>
+                            <option selected>{{$data_kelas->tahun}}</option>
+                            <?php
+                                    }else{
+                            ?>
+                                      <option>{{$x}}</option>  
+                            <?php
+                                    }
+                            }
+                            ?>
+                        </select>
                         @error ('tahun')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
