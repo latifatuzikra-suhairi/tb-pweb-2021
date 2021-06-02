@@ -57,11 +57,6 @@ class KrsController extends Controller
      */
     public function show($kelas_id)
     {
-        // $list_kelas = DB::table('kelas')
-        //             -> select ('kode_kelas', 'kode_makul', 'nama_makul', 'tahun', 'semester', 'sks')
-        //             -> where ('kelas_id','=','1')
-        //             -> get();
-        // $data_krs = Krs::where('mahasiswa_id', $mahasiswa_id)->get();
         $data_kelas = Kelas::find($kelas_id);
         $list_hadir=DB::table('absensi')
                         ->join('pertemuan', 'pertemuan.pertemuan_id', '=', 'absensi.pertemuan_id')
@@ -71,16 +66,7 @@ class KrsController extends Controller
                         ->where ('id','=','2')
                         ->orderBy ('tanggal', 'asc')
                         ->get();
-        // // $durasi  =$list_hadir->durasi;
-        // $durasi = '5400';
-        // $int= (int)$durasi;
-                                    
-        // //  <!-- //membagi detik menjadi jam -->
-        // $jam   =floor($durasi/(60*60));
-                
-        // // <!-- //membagi sisa detik setelah dikurangi $jam menjadi menit -->
-        // $menit =floor($durasi - $jam *(60*60))/60;
-                                                 
+                                                
         return view('user.krs.detail', compact('data_kelas', 'list_hadir'));
     }
 
