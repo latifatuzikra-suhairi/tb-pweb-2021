@@ -10,7 +10,6 @@
 
 @section('content')
     <div class="container">
-        <h1>Detail Kelas</h1>
 
         @if(session('psn_sukses')){
             <div class="alert alert-success" role="alert">
@@ -24,57 +23,111 @@
         }
         @endif
 
-        {{-- Detail Daftar Kelas --}}
-        <div class="row">
-            <div class="col-4 form-group">
-                <label for="kode-kelas">Kode Kelas</label>
-            </div>
-            <div class="col-4 form-group">
-                <label for="kode-matakul">Kode Mata Kuliah</label>
-
-            </div>
-            <div class="col-4 form-group">
-                <label for="nama-makul">Nama Mata Kuliah</label>
-
-            </div>
+        <!---- Detail Daftar Kelas ---->
+        <div class="border-bottom"><p>
+            <h2><b>{{ $data_kelas->nama_makul }}</b></h2>
+             - {{ $data_kelas->kode_makul }}</p>
         </div>
 
-        {{-- Data Pertemuan --}}
-        <div class="card">
-            <div class="card-header" id="headingOne">
+        <div>
+            <table class="table table-borderless" style="width:70%">
+                <tr>
+                    <td>Kode Kelas</td>
+                    <td>:</td>
+                    <td>{{ $data_kelas->kode_kelas }}</td>
+                    <td></td>
+                    <td>Semester</td>
+                    <td>:</td>
+                    @if($data_kelas->semester == 1)
+                        <td>{{ "Ganjil" }}</td>
+                    @else
+                        <td>{{ "Genap" }}</td>
+                    @endif 
+                </tr>
+                <tr>
+                    <td>Tahun</td>
+                    <td>:</td>
+                    <td>{{ $data_kelas->tahun }}</td>
+                    <td></td>
+                    <td>SKS</td>
+                    <td>:</td>
+                    <td>{{ $data_kelas->sks }} SKS</td>
+                </tr>
+            </table>
+        </div>
+ 
+        <!---- Data Pertemuan ---->
+        <div class="card mb-3">
+            <div class="card-header" id="headingOne" style="background-color: rgb(204, 207, 215, 0.3)">
             <div class="row">
-                <div class="col-6">
-                    <h5 class="mb-0">Pertemuan</h5>
+                <div class="col-9">
+                    <p class="mb-0" style="font-size: 17px; font-weight:600; color:#112c66;">Data Kehadiran</p>
                 </div>
-                <div class="col-6">
-                    <h5 class="mb-0">
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2">Toggle second element</button>
-                    </h5>
+                <div class="col-3">
+                    <p class="mb-0">
+                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1">V</button>
+                    </p>
                 </div>
             </div>
             </div>
-            <div id="multiCollapse2" class="collapse multi-collapse">
-                <div class="card-body">
-                    <div class="row">
-                        @forelse ($data_pert as $pert)
-                        <div class="col-sm-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title border-bottom">Pertemuan {{ $pert['pertemuan_ke'] }}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">Tanggal : {{ $pert['tanggal'] }}</h6>
-                                    <a href="{{route('detail.pertemuan', ['kelas_id'=>$data_kelas->kelas_id,'pertemuan_id'=>$pert['pertemuan_id']])}}" class="card-link">Lihat Pertemuan >></a>
-                                </div>
-                              </div>
-                        </div> 
-                        @empty
-                            <h6 class="mx-auto">Pertemuan Belum Dilakukan!</h6>
-                        @endforelse
+            <div id="multiCollapse1" class="collapse multi-collapse">
+                <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
+                    <div class="table-responsive">
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr style="font-size: 16px">
+                                <th class="text-center" scope="col">#</th>
+                                <th scope="col">Pertemuan Ke</th>
+                                <th scope="col">Tanggal</th>
+                                <th scope="col">Materi</th>
+                                <th scope="col">Status Kehadiran</th>
+                                <th scope="col">Jam Masuk</th>
+                                <th scope="col">Jam Keluar</th>
+                                <th scope="col">Durasi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach ($list_hadir as $hadir)
+                            <tr>
+                                <th scope="row">{{ $loop->iteration }}</th>
+                                <td >{{ $hadir->pertemuan_ke }}</td>
+                                <td>{{ date('d M Y', strtotime($hadir->tanggal)) }}</td>
+                                <td>{{ $hadir->materi }}</td>
+                                <!-- Status Kehadiran  -->
+                                @if($hadir->jam_masuk != null)
+                                    <td>{{ "Hadir" }}</td>
+                                @else
+                                    <td>{{ "Tidak Hadir" }}</td>
+                                @endif 
+                                <!-- Jam Masuk  -->
+                                @if($hadir->jam_masuk != null)
+                                    <td>{{ $hadir->jam_masuk}}</td>
+                                @else
+                                    <td>{{ "-" }}</td>
+                                @endif 
+                                <!-- Jam Keluar  -->
+                                @if($hadir->jam_masuk != null)
+                                    <td>{{ $hadir->jam_keluar }}</td>
+                                @else
+                                    <td>{{ "-" }}</td>
+                                @endif 
+                                <!-- durasi -->
+                                <td>    
+                                    {{ $jam=floor($hadir->durasi /(60*60)) }} jam 
+                                    {{ floor((($hadir->durasi) - ($jam*3600))/60) }} menit
+                                </td>
+                            </tr>
+                        @endforeach         
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
-            </div>
+        </div>
 
-    
+
+
+  
 
     </div>
 @endsection

@@ -18,11 +18,10 @@ class KrsController extends Controller
      */
     public function index()
     {
-  
         $data_krs = DB::table('krs')
-                    -> join ('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
-                    -> select ('kode_kelas', 'nama_makul', 'tahun', 'semester')
-                    -> where ('mahasiswa_id','=','1')
+                    -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                    -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                    -> where ('mahasiswa.id','=','user.id')
                     -> orderBy ('tahun', 'desc')
                     -> orderBy ('semester', 'desc')
                     -> get();
@@ -56,12 +55,33 @@ class KrsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show_detail($kelas_id)
+    public function show($kelas_id)
     {
-        // $data_krs = Krs::find($kelas_id);
+        // $list_kelas = DB::table('kelas')
+        //             -> select ('kode_kelas', 'kode_makul', 'nama_makul', 'tahun', 'semester', 'sks')
+        //             -> where ('kelas_id','=','1')
+        //             -> get();
+        // $data_krs = Krs::where('mahasiswa_id', $mahasiswa_id)->get();
         $data_kelas = Kelas::find($kelas_id);
-        $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
-        return view('user.krs.detail', compact('data_kelas', 'data_pert'));
+        $list_hadir=DB::table('absensi')
+                        ->join('pertemuan', 'pertemuan.pertemuan_id', '=', 'absensi.pertemuan_id')
+                        ->join('krs', 'krs.krs_id', '=', 'absensi.krs_id')
+                        ->join('kelas', 'kelas.kelas_id', '=', 'pertemuan.kelas_id')
+                        ->join('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                        ->where ('id','=','2')
+                        ->orderBy ('tanggal', 'asc')
+                        ->get();
+        // // $durasi  =$list_hadir->durasi;
+        // $durasi = '5400';
+        // $int= (int)$durasi;
+                                    
+        // //  <!-- //membagi detik menjadi jam -->
+        // $jam   =floor($durasi/(60*60));
+                
+        // // <!-- //membagi sisa detik setelah dikurangi $jam menjadi menit -->
+        // $menit =floor($durasi - $jam *(60*60))/60;
+                                                 
+        return view('user.krs.detail', compact('data_kelas', 'list_hadir'));
     }
 
     /**
