@@ -1,4 +1,67 @@
+body{
+   background-color: #edf1f5;
+   font-family:'Poppins';
+}
 
+/* Card List Pertemuan Halaman Admin/Detail/Pertemuan */
+.list-pertemuan {
+   box-shadow: 1px 1px 8px rgb(0,51,102, 0.5);
+   margin: 5px 0;
+   background-color: rgb(255, 255, 255);
+   position: relative;
+   z-index: 1;
+}
+.list-pertemuan h5{
+   font-family: 'Poppins';
+   font-size: 18px;
+   transition: 0.5s all;
+}
+.list-pertemuan p{
+   font-family: 'Lato';
+   font-size: 13px;
+}
+.list-pertemuan a{
+   color: rgb(255, 255, 255);
+   background-color: #003366;
+   display: inline-block;
+   font-size: 13px;
+}
+
+.list-pertemuan::before{
+   content: "";
+   width: 3px;
+   height: 100%;
+   background-color: rgb(0,51,102, 0.9);
+   position: absolute;
+   left: 0;
+   top: 0;
+   z-index: -1;
+   transition: 0.5s all;
+}
+
+.list-pertemuan:hover::before{
+   width: 100%;
+}
+
+.list-pertemuan:hover h5{
+   color:white;
+}
+
+.list-pertemuan:hover p{
+   color:white;
+}
+
+.list-pertemuan:hover a{
+   color: #003366;
+   background-color: #fdfdfd;
+   padding: 6px 12px;
+   display: inline-block;
+   font-size: 13px;
+   border: 1px solid #003366;
+   transition: 0.5s all;
+}
+ 
+ 
  .jumbotron::after{
     content: '';
     display: block;
@@ -15,6 +78,13 @@
     margin: 80px 0px 10px 0px;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     font-weight: 450;
+ }
+
+ .batas{
+   border: 2px solid #B3180e; 
+   border-radius:15px; 
+   width:80px; 
+   margin-top: -7px"
  }
  
  /* Desktop Version */

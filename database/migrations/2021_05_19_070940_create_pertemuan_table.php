@@ -19,7 +19,7 @@ class CreatePertemuanTable extends Migration
             $table->foreign('kelas_id')->references('kelas_id')->on('kelas');
             $table->integer('pertemuan_ke')->nullable($value=false);
             $table->date('tanggal')->nullable($value=false);
-            $table->string('materi', 50)->nullable($value=true);
+            $table->string('materi', 50)->nullable($value=false);
         });
     }
 

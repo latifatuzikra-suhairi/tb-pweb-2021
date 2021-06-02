@@ -58,7 +58,6 @@ class KrsController extends Controller
      */
     public function show_detail($kelas_id)
     {
-        // $data_krs = Krs::find($kelas_id);
         $data_kelas = Kelas::find($kelas_id);
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
         return view('user.krs.detail', compact('data_kelas', 'data_pert'));
