@@ -95,7 +95,14 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+                            @foreach ($data_mhs as $mhs)
+                        <tr style="font-size: 16px;">
+                            <td class="text-center">{{ $loop->iteration }}</td>
+                            <td>{{ $mhs->nama }}</td>
+                            <td>{{ $mhs->nim }}</td>
+                            <td class="text-center"><button class="btn btn-sm btn-danger">Hapus</button></td>
+                        </tr>
+                        @endforeach
                         </tbody>
                     </table>
                     </div>
@@ -105,32 +112,30 @@
 
         <!---- Data Pertemuan ---->
         <div class="card">
-            <div class="card-header" id="headingOne">
+            <div class="card-header" id="headingOne" style="background-color: rgb(204, 207, 215, 0.3)">
             <div class="row">
-                <div class="col-6">
-                    <h5 class="mb-0">Data Pertemuan<img style="margin-bottom:3px; margin-left:10px" src=".../img/pertemuan.png"></h5>
+                <div class="col-9">
+                    <p class="mb-0" style="font-size: 17px; font-weight:600; color:#112c66;">Data Pertemuan<img class="mb-1 ml-3" src="../img/pertemuan.png"></p>
                 </div>
-                <div class="col-6">
-                    <h5 class="mb-0">
+                <div class="col-3">
+                    <p class="mb-0">
                         <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2">v</button>
-                    </h5>
+                    </p>
                 </div>
             </div>
             </div>
             <div id="multiCollapse2" class="collapse multi-collapse">
-                <div class="card-body" id="addPertemuan">
+                <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
                     <a type="button" class="btn btn-primary mb-3" href="{{ route('tambah.pertemuan', [$data_kelas->kelas_id]) }}">Tambah Pertemuan</a>
                     <div class="row">
                         @forelse ($data_pert as $pert)
-                        <div class="col-sm-3">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title border-bottom">Pertemuan {{ $pert['pertemuan_ke'] }}</h5>
-                                    <p class="card-subtitle mb-2 text-muted" style="font-size: 12px">Tanggal : {{ date('d M Y', strtotime($pert['tanggal'])) }}</p>
-                                    <a href="{{ route('detail.pertemuan', [$data_kelas->kelas_id, $pert['pertemuan_id']]) }}" class="card-link">Lihat Pertemuan >></a>
-                                </div>
-                              </div>
-                        </div> 
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-3">
+                            <div class="list-pertemuan px-4 py-3">
+                                <h5><b>{{ 'PERTEMUAN '.$pert->pertemuan_ke }}</b></h5><hr style="margin-top: -5px">
+                                <p class="mb-2" style="margin-top: -10px">Tanggal : {{ date('d M Y', strtotime($pert['tanggal'])) }}</p>
+                                <a class="btn px-2 py-1" href="{{ route('detail.pertemuan', [$data_kelas->kelas_id, $pert['pertemuan_id']]) }}">Lihat</a>
+                            </div>
+                        </div>
                         @empty
                             <h6 class="mx-auto" style="color: silver">Belum Ada Pertemuan!</h6>
                         @endforelse

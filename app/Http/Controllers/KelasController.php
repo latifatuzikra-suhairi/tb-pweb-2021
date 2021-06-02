@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Pertemuan;
+use App\Models\Mahasiswa;
 
 class KelasController extends Controller
 {
@@ -15,7 +16,7 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $data_kelas = Kelas::all();
+        $data_kelas = Kelas::orderby('tahun','desc')->orderby('semester','desc')->paginate(5);
         return view('admin.kelas.index', ['data_kelas' => $data_kelas]);
     }
 
@@ -67,7 +68,12 @@ class KelasController extends Controller
     {
         $data_kelas = Kelas::findOrFail($kelas_id);
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert'));
+        $data_mhs = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+        ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
+        ->where('krs.kelas_id', $kelas_id)
+        ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
+        ->get();
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert', 'data_mhs'));
     }
 
     /**
