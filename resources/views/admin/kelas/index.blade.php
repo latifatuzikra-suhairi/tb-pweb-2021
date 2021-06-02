@@ -30,7 +30,7 @@
             <table class="table table-bordered dataTabel">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            
             <th scope="col">Kode Kelas</th>
             <th scope="col">Tahun</th>
             <th scope="col">Semester</th>
@@ -40,7 +40,7 @@
         <tbody>
           @foreach ($data_kelas as $kelas)
           <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
+            
             <td>{{ $kelas->kode_kelas }}</td>
             <td>{{ $kelas->tahun }}</td>
             <td>{{ $kelas->semester }}</td>
@@ -61,6 +61,18 @@
           @endforeach
         </tbody>
       </table> 
+      <div>
+        Showing
+        {{$data_kelas->firstItem()}}
+        to
+        {{$data_kelas->lastItem()}}
+        of
+        {{$data_kelas->total()}}
+        entries
+      </div>
+      <div>
+        {{ $data_kelas->links('pagination::bootstrap-4') }}
+      </div>
       </div>
     </div>
   </div>

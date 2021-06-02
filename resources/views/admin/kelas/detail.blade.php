@@ -125,7 +125,11 @@
                 </div>
                 <div class="col-3">
                     <p class="mb-0">
+<<<<<<< HEAD
                         <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2"><img style="width:70%" src="../img/dropdown.png"></button>
+=======
+                        <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2">v</button>
+>>>>>>> 9625280758d056ffc0aa7a900414547e69455627
                     </p>
                 </div>
             </div>
