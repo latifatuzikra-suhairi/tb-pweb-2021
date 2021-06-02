@@ -18,8 +18,6 @@ class CreateMahasiswaTable extends Migration
             $table->string('nama', 50)->nullable($value=false);
             $table->string('nim', 18)->nullable($value=false);
             $table->string('email', 50)->nullable($value=false);
-            $table->integer('tipe')->nullable($value=false);
-            $table->integer('password')->nullable($value=false);
         });
     }
 
