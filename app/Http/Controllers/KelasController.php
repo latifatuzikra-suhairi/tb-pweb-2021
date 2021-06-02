@@ -67,7 +67,6 @@ class KelasController extends Controller
     public function show($kelas_id)
     {
         $data_kelas = Kelas::findOrFail($kelas_id);
-<<<<<<< HEAD
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)
                                 ->orderBy('pertemuan_ke', 'asc')
                                 ->get();
@@ -77,14 +76,6 @@ class KelasController extends Controller
                                     ->where('krs.kelas_id', $kelas_id)
                                     ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
                                     ->get();
-=======
-        $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
-        $data_mhs = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-        ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
-        ->where('krs.kelas_id', $kelas_id)
-        ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
-        ->get();
->>>>>>> 9625280758d056ffc0aa7a900414547e69455627
         return view('admin.kelas.detail', compact('data_kelas', 'data_pert', 'data_mhs'));
     }
 
