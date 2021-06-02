@@ -15,11 +15,13 @@ class CreateMahasiswaTable extends Migration
     {
         Schema::create('mahasiswa', function (Blueprint $table) {
             $table->integer('mahasiswa_id')->autoIncrement();
+            $table->integer('id')->nullable($value=false);
+            $table->foreign('id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->string('nama', 50)->nullable($value=false);
             $table->string('nim', 18)->nullable($value=false);
             $table->string('email', 50)->nullable($value=false);
-            $table->integer('tipe')->nullable($value=false);
-            $table->integer('password')->nullable($value=false);
+            // $table->integer('tipe')->nullable($value=false);
+            // $table->integer('password')->nullable($value=false);
         });
     }
 

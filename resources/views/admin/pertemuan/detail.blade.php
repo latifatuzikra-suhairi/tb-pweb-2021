@@ -51,28 +51,35 @@
 
     {{-- Table Daftar Hadir Mahasiswa --}}
     <div class="card">
-        <div class="card-header">
+        <div class="card-header" style="background-color: rgb(204, 207, 215, 0.3); font-size: 17px; font-weight:600; color:#112c66;">
             Daftar Hadir Mahasiswa
         </div>
         <div class="card-body">
-            {{-- {{ route('upload.pertemuan') }} --}}
-            <form method="POST" enctype="multipart/form-data" action="">
+            @if (count($errors) > 0)
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> Terdapat Masalah Pada File Anda!
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+                
+            <form method="POST" enctype="multipart/form-data" action="{{ route('upload.pertemuan', [$kelas->kelas_id, $pertemuan->pertemuan_id]) }}">
                 @csrf
-                <div class="form-group">
-                    <table class="table">
+                <div class="form-group table-responsive">
+                    <table class="table border-bottom">
                         <tr>
-                            <td width="40%" align="right"><label>Upload File Pertemuan</label></td>
+                            <td width="40%" align="right"><label>Upload File Pertemuan .csv</label></td>
                             <td width="30"><input type="file" name="file"></td>
                             <td width="30%" align="left"><button type="submit" class="btn-sm btn-primary">Unggah</button>
-                        </tr>
-                        <tr>
-                            <td width="40%" align="right"></td>
-                            <td width="30"><span class="text-muted">.xls, .xslx</span></td>
-                            <td width="30%" align="left"></td>
                         </tr>
                     </table>
                 </div>
             </form>
+            <div> 
+
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
                 <tr>
@@ -96,7 +103,10 @@
                     @endif
                     <td>{{ $data->jam_masuk }}</td>
                     <td>{{ $data->jam_keluar }}</td>
-                    <td>{{ $data->durasi }}</td>
+                    <td>
+                        {{ $jam=floor($data->durasi /(60*60)) }} jam 
+                        {{ floor((($data->durasi) - ($jam*3600))/60) }} menit
+                    </td>
                 </tr>
                 @endforeach
             </tbody>
