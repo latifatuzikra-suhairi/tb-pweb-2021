@@ -1,9 +1,9 @@
-<form action="/mahasiswa/{{ $mahasiswa->id }}/destroy" method="post" class="d-inline">
+<form action="/kelas/{{$mhs->kelas_id}}/{{$mhs->mahasiswa_id }}/hapus_mahasiswa" method="post" class="d-inline">
 @method('delete')
 @csrf
               
 <!-- Modal -->
-<div class="modal fade" id="ModalDelete{{$mahasiswa->id}}" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="ModalDelete{{$mhs->mahasiswa_id}}" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -12,7 +12,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">Yakin akan menghapus <b> {{$mahasiswa->nama}}</b></div>
+      <div class="modal-body">Yakin akan menghapus <b> {{$mhs->nama}}</b></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Cancel')}}</button>
         <button type="submit" class="btn btn-danger">{{ __('Hapus')}}</button>

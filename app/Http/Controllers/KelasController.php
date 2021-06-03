@@ -31,6 +31,12 @@ class KelasController extends Controller
         return redirect()->back();
     }
 
+    public function hapus_peserta($mahasiswa_id)
+    {
+       
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *

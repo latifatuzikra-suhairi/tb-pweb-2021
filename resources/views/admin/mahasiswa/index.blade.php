@@ -49,23 +49,13 @@
             <td>{{ $mahasiswa->email }}</td>
             <td>
 
-            <!-- <form action="/mahasiswa/{{ $mahasiswa->mahasiswa_id }}/update" method="post">
-                @method('update')
-                    @csrf
-            <button type="submit" class="btn btn-primary">Edit</button>
-            </form> -->
-            <a href="/mahasiswa/{{ $mahasiswa->mahasiswa_id}}/edit" class="btn btn-primary">Edit</a>
+ 
+            <a href="/mahasiswa/{{ $mahasiswa->id}}/edit" class="btn btn-primary">Edit</a>
 
             
-            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$mahasiswa->mahasiswa_id}}">Hapus</a>
+            <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$mahasiswa->id}}">Hapus</a>
             
-              <!-- <form action="/mahasiswa/{{ $mahasiswa->mahasiswa_id }}/destroy" method="post" class="d-inline">
-                @method('delete')
-                    @csrf
-                    <button type="submit" class="btn btn-danger">Hapus</button>
-                </form> -->
-                <!-- <a href="/mahasiswa/{{ $mahasiswa->mahasiswa_id }}/destroy" class="btn btn-danger">Hapus</a> -->
-            </td>
+           </td>
             @include('admin.mahasiswa.delete')
           </tr>
           @endforeach

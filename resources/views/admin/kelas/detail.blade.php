@@ -22,6 +22,13 @@
 
 @endsection
 
+@if (session('status'))
+        <br>
+            <div class="alert alert-success">
+                {{ session('status')}}
+            </div>
+        @endif 
+
 @section('content')
     <div class="container mt-4">
         <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
@@ -117,8 +124,11 @@
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $mhs->nama }}</td>
                                 <td>{{ $mhs->nim }}</td>
-                                <td class="text-center"><button class="btn btn-sm btn-danger" href="" >hapus</button></td>
+                                <td>
+                                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$mhs->mahasiswa_id}}">Hapus</a>
+                                </td>
                             </tr>
+                            @include('admin.kelas.deletemahasiswa')
                         </tbody>
                         @endforeach
                     </table>
