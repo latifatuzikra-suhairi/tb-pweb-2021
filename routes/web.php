@@ -4,6 +4,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\PertemuanController;
 use App\Http\Controllers\KrsController;
+use App\Http\Controllers\AbsensiController;
 use App\Models\Pertemuan;
 use Illuminate\Support\Facades\Route;
 
@@ -23,13 +24,13 @@ Auth::routes(['register' => true, 'reset' =>   false]);
 
 Route::group(['middleware' => ['auth', 'checkRole:mahasiswa']], function(){
     
-    Route::get('/', function () {
-        return view('user.dashboard');
-    });
-    
+    // Route::get('/', function () {
+    //     return view('user.dashboard');
+    // });
+    Route::get('/',[KrsController::class, 'info_krs']); //info krs mahasiswa
 
     Route::get('/krs',[KrsController::class, 'index']); //daftar kelas berdasarkan KRS
-    Route::get('/krs/{kelas_id}/detail', [KrsController::class, 'show_detail']); //info detail kelas
+    Route::get('/krs/{kelas_id}/detail', [KrsController::class, 'show']); //info detail kelas
 
 });
 
@@ -38,7 +39,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function(){
     Route::get('/home', function () {
         return view('admin.dashboard');
     });
-
+    
     Route::get('/kelas/{kelas_id}/pertemuan/{pertemuan_id}', [PertemuanController::class, 'index'])->name('detail.pertemuan'); //info detail pertemuan
     Route::get('/pertemuan/{kelas_id}/create', [PertemuanController::class, 'create'])->name('tambah.pertemuan'); //tambah pertemuan
     Route::post('/pertemuan/{kelas_id}/store', [PertemuanController::class, 'store'])->name('simpan.pertemuan'); //tambah pertemuan

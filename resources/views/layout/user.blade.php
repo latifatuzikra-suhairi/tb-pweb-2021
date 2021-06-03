@@ -59,6 +59,8 @@
       </div>
     </nav>
     <!-- Akhir Navbar -->
+    
+    @yield('breadcrumbs')
 
     @yield('content')
 

@@ -8,6 +8,19 @@
 </style>
 @section('title', 'SIRAH | Detail Kelas')
 
+@section('breadcrumbs')
+<div style="background-color: white; margin-top:-5px">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb container" style="background-color: white">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/krs">My Classes</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ $data_kelas->kode_kelas }}</li>
+        </ol>
+    </nav>
+    <div style="border: 2px solid #001136; margin-top:-20px"></div>
+</div>
+@endsection
+
 @section('content')
     <div class="container">
 
@@ -38,10 +51,10 @@
                     <td></td>
                     <td>Semester</td>
                     <td>:</td>
-                    @if($data_kelas->semester == 1)
-                        <td>{{ "Ganjil" }}</td>
-                    @else
+                    @if(($data_kelas->semester)%2 == 0 )
                         <td>{{ "Genap" }}</td>
+                    @else
+                        <td>{{ "Ganjil" }}</td>
                     @endif 
                 </tr>
                 <tr>
@@ -65,7 +78,8 @@
                 </div>
                 <div class="col-3">
                     <p class="mb-0">
-                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1">V</button>
+                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:70%" src="../img/dropdown.png"></button>
+
                     </p>
                 </div>
             </div>

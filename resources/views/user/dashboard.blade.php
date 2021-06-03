@@ -18,14 +18,18 @@
             <div class="row">
                 <div class="col-lg">
                     <img src="img/read.png" alt="mahasiswa" class="float-left mr-3 mb-3">
-                    <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">Kelas</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Banyak Kelas : 14 Kelas</p>
+                    <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">KELAS</h4>
+                    <p style=" font-size: 14px; color: #1a3f92;">Pada Semester Ini : {{ $info_kelas }}</p>
                 </div>
-
                 <div class="col-lg">
                     <img src="img/read.png" alt="pertemuan" class="float-left mr-3 mb-3">
-                    <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">PERTEMUAN</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Pertemuan Ke-6</p>
+                    <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">MATA KULIAH</h4>
+                    <p style=" font-size: 14px; color: #1a3f92;">Total Sudah Diambil : {{ $info_makul}} </p>
+                </div>
+                <div class="col-lg">
+                    <img src="img/read.png" alt="pertemuan" class="float-left mr-3 mb-3">
+                    <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">SKS</h4>
+                    <p style=" font-size: 14px; color: #1a3f92;">Total Sudah Diambil: {{ $info_sks}} </p>
                 </div>
             </div>
         </div>

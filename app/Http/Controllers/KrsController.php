@@ -11,6 +11,35 @@ use App\Models\Absensi;
 
 class KrsController extends Controller
 {
+    public function info_krs (){
+        $userlog=auth()->user()->id;
+        $max_semester = DB::table('krs')
+                    -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                    -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                    -> where ('mahasiswa.id', $userlog)
+                    -> max ('semester');
+
+        $info_kelas = DB::table('krs')
+                    -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                    -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                    -> where ('semester', $max_semester)
+                    -> count();
+
+        $info_sks = DB::table('krs')
+                    -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                    -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                    -> where ('mahasiswa.id', $userlog)
+                    -> sum('sks');
+        
+        $info_makul = DB::table('krs')
+                    -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                    -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                    -> where ('mahasiswa.id', $userlog)
+                    -> count('kode_makul');
+
+        return view('user.dashboard', compact('info_kelas', 'info_sks', 'info_makul', 'userlog'));
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,10 +47,11 @@ class KrsController extends Controller
      */
     public function index()
     {
+        $userlog=auth()->user()->id;
         $data_krs = DB::table('krs')
                     -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
                     -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                    -> where ('mahasiswa.id','=','user.id')
+                    -> where ('mahasiswa.id', $userlog)
                     -> orderBy ('tahun', 'desc')
                     -> orderBy ('semester', 'desc')
                     -> get();
@@ -57,13 +87,15 @@ class KrsController extends Controller
      */
     public function show($kelas_id)
     {
+        $userlog=auth()->user()->id;
         $data_kelas = Kelas::find($kelas_id);
         $list_hadir=DB::table('absensi')
                         ->join('pertemuan', 'pertemuan.pertemuan_id', '=', 'absensi.pertemuan_id')
                         ->join('krs', 'krs.krs_id', '=', 'absensi.krs_id')
                         ->join('kelas', 'kelas.kelas_id', '=', 'pertemuan.kelas_id')
                         ->join('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                        ->where ('id','=','2')
+                        ->where ('mahasiswa.id', $userlog)
+                        ->where ('kelas.kelas_id', $kelas_id)
                         ->orderBy ('tanggal', 'asc')
                         ->get();
                                                 
