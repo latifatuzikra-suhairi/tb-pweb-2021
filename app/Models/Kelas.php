@@ -13,7 +13,7 @@ class Kelas extends Model
     protected $primaryKey = 'kelas_id';
     protected $fillable = ['kode_kelas', 'kode_makul', 'nama_makul', 'tahun', 'semester', 'sks'];
 
-    public function krs()
+    public function krs()     
     {
         return $this->hasMany(Krs::class);
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Pertemuan;
+use App\Models\Krs;
 
 class KelasController extends Controller
 {
@@ -17,6 +18,16 @@ class KelasController extends Controller
     {
         $data_kelas = Kelas::all();
         return view('admin.kelas.index', ['data_kelas' => $data_kelas]);
+    }
+
+
+    public function store_peserta(Request $request, $id){
+        $request->request->add(['kelas_id' => $id]);
+        Krs::create([
+            'kelas_id' => $request->kelas_id,
+            'mahasiswa_id' => $request->mahasiswa_id,
+        ]);
+        return redirect()->back();
     }
 
     /**
@@ -63,12 +74,26 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
+
+
+     
+
     public function show($kelas_id)
     {
+        $data_mahasiswa = \App\models\mahasiswa::all();
         $data_kelas = Kelas::findOrFail($kelas_id);
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert'));
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mahasiswa'));
     }
+
+
+
+
+
+
+
 
     /**
      * Show the form for editing the specified resource.

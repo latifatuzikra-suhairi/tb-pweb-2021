@@ -83,7 +83,16 @@
             </div>
             <div id="multiCollapse1" class="collapse multi-collapse">
                 <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
-                    <a type="button" class="btn btn-primary mb-3" href="{{ route('tambah.peserta', [$data_kelas->kelas_id]) }}">Tambah Peserta Kelas</a>
+                    <form action="/kelas/{{$data_kelas->kelas_id}}/store" method="post">
+                        @csrf
+                        <select name="mahasiswa_id" class="form-select form-select-sm" aria-label=".form-select-sm example"> 
+                        <option value="" hidden>-- Pilih Mahasiswa --</option>
+                        @foreach ($data_mahasiswa as $mhs)
+                            <option value="{{$mhs->mahasiswa_id}}">{{$mhs->nama}}</option>
+                        @endforeach
+                        </select>
+                        <button class="btn btn-primary" type="submit">Tambah Peserta</button>
+                    </form>
                     <div class="table-responsive">
                     <table class="table table-hover table-light">
                         <thead>

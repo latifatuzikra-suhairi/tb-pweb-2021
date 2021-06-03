@@ -36,7 +36,7 @@ class KrsController extends Controller
      */
     public function create()
     {
-        // 
+        return view('admin.kelas.create_mahasiswa');
     }
 
     /**
