@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Mahasiswa;
+use App\Models\Users;
+use App\Models\Kelas;
+use App\Models\Pertemuan;
 
 class HomeController extends Controller
 {
@@ -25,4 +29,6 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    
 }

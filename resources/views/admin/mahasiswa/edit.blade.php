@@ -18,7 +18,10 @@
         
         <div class="card mb-4">
         <div class="card-body">
-        <form action="/mahasiswa/{{ $data_mahasiswa->mahasiswa_id }}/update" method="POST">
+        @foreach ($data_mahasiswa as $data_mahasiswa)
+    
+       
+        <form action="/mahasiswa/{{ $data_mahasiswa->id }}/update" method="POST">
                         @csrf
                         <div class="form-group">
                         <label for="nama">Nama</label>
@@ -36,18 +39,10 @@
                         <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan email" id="email" name="email" value="{{ $data_mahasiswa->email }}"> 
                         @error ('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
-                    <div class="form-group">
-                        <label for="tipe">Tipe</label>
-                        <input type="text" class="form-control @error('tipe') is-invalid @enderror" placeholder="Masukkan tipe" id="tipe" name="tipe" value="{{ $data_mahasiswa->tipe }}"> 
-                        @error ('tipe')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="text" class="form-control @error('password') is-invalid @enderror" placeholder="Masukkan password" id="password" name="password" value="{{ $data_mahasiswa->password }}"> 
-                        @error ('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                    
                            
                 <button type="submit" class="btn btn-primary">Edit Data</button>
+                @endforeach
                 </form>  
         </div>
         </div>

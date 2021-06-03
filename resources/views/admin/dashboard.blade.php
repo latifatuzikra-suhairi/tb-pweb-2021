@@ -19,15 +19,15 @@
                 <div class="col-lg">
                     <img src="img/read.png" alt="mahasiswa" class="float-left mr-3 mb-3">
                     <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">MAHASISWA</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Banyak Mahasiswa : 100 orang</p>
+                    <p style=" font-size: 14px; color: #1a3f92;">Total: {{$jumlahMahasiswa->count()}} mahasiswa</p>
                 </div>
                 <div class="col-lg">
-                    <img src="img/read.png" alt="kelas" class="float-left mr-3 mb-3">
+                    <img src="img/book.png" alt="kelas" class="float-left mr-3 mb-3">
                     <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">KELAS</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Banyak Kelas : 14 kelas</p>
+                    <p style=" font-size: 14px; color: #1a3f92;">Banyak Kelas: {{$jumlahKelas->count()}} kelas</p>
                 </div>
                 <div class="col-lg">
-                    <img src="img/read.png" alt="pertemuan" class="float-left mr-3 mb-3">
+                    <img src="img/appointment.png" alt="pertemuan" class="float-left mr-3 mb-3">
                     <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">PERTEMUAN</h4>
                     <p style=" font-size: 14px; color: #1a3f92;">Pertemuan Ke-6</p>
                 </div>

@@ -22,6 +22,13 @@
 
 @endsection
 
+@if (session('status'))
+        <br>
+            <div class="alert alert-success">
+                {{ session('status')}}
+            </div>
+        @endif 
+
 @section('content')
     <div class="container mt-4">
         <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
@@ -74,47 +81,73 @@
 
         <!---- Data Mahasiswa Yang Mengikuti Kelas ---->
         <div class="card mb-3">
-        <div class="card-header" id="headingOne" style="background-color: rgb(204, 207, 215, 0.3)">
-            <div class="row">
-            <div class="col-9">
-                <p class="mb-0" style="font-size: 17px; font-weight:600; color:#112c66;">Data Mahasiswa</p>
-            </div>
-            <div class="col-3">
-                <p class="mb-0">
-                    <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:70%" src="../img/dropdown.png"></button>
-                </p>
-            </div>
-        </div>
-        </div>
-        <div id="multiCollapse1" class="collapse multi-collapse">
-            <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
-                <a type="button" class="btn btn-primary mb-3" href="{{ route('tambah.peserta', [$data_kelas->kelas_id]) }}">Tambah Peserta Kelas</a>
-                
-                <div class="table-responsive">
-                <table class="table table-hover table-light">
-                    <thead>
-                        <tr style="font-size: 16px">
-                            <th class="text-center" scope="col">#</th>
-                            <th scope="col">Nama</th>
-                            <th scope="col">NIM</th>
-                            <th class="text-center" scope="col">Kelola</th>
-                        </tr>
-                    </thead>
-                    @foreach ($data_mhs as $mhs)
-                    <tbody>
-                        <tr style="font-size: 16px;">
-                            <td class="text-center">{{ $loop->iteration }}</td>
-                            <td>{{ $mhs->nama }}</td>
-                            <td>{{ $mhs->nim }}</td>
-                            <td class="text-center"><button class="btn btn-sm btn-danger">hapus</button></td>
-                        </tr>
-                    </tbody>
-                    @endforeach
-                </table>
+            <div class="card-header" id="headingOne" style="background-color: rgb(204, 207, 215, 0.3)">
+                <div class="row">
+                <div class="col-9">
+                    <p class="mb-0" style="font-size: 17px; font-weight:600; color:#112c66;">Data Mahasiswa</p>
+                </div>
+                <div class="col-3">
+                    <p class="mb-0">
+                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:70%" src="../img/dropdown.png"></button>
+                    </p>
                 </div>
             </div>
-        </div>
-        </div>
+            </div>
+            <div id="multiCollapse1" class="collapse multi-collapse">
+                <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
+                    <form action="/kelas/{{$data_kelas->kelas_id}}/store" method="post">
+                        @csrf
+                        <select name="mahasiswa_id" class="form-select form-select-sm" aria-label=".form-select-sm example"> 
+                        <option value="" hidden>-- Pilih Mahasiswa --</option>
+                        @forelse ($non_peserta as $mhs)
+                            <option value="{{$mhs->mahasiswa_id}}">{{$mhs->nama}}</option>
+                        @empty
+                            <option value="" disabled>Seluruh Mahasiswa Terdaftar</option>
+                        @endforelse
+                        </select>
+                        <button class="btn btn-primary" type="submit">Tambah Peserta</button>
+                    </form>
+                    
+                    <div class="table-responsive">
+                    <table class="table table-hover table-light">
+                        <thead>
+                            <tr style="font-size: 16px">
+                                <th class="text-center" scope="col">#</th>
+                                <th scope="col">Nama</th>
+                                <th scope="col">NIM</th>
+                                <th class="text-center" scope="col">Kelola</th>
+                            </tr>
+                        </thead>
+                        @foreach ($data_mhs as $mhs)
+                        <tbody>
+                            <tr style="font-size: 16px;">
+                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td>{{ $mhs->nama }}</td>
+                                <td>{{ $mhs->nim }}</td>
+                                <td>
+                                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$mhs->mahasiswa_id}}">Hapus</a>
+                                </td>
+                            </tr>
+                            @include('admin.kelas.deletemahasiswa')
+                        </tbody>
+                        @endforeach
+                    </table>
+                    <div>
+                        Showing
+                        {{$data_mhs->firstItem()}}
+                        to
+                        {{$data_mhs->lastItem()}}
+                        of
+                        {{$data_mhs->total()}}
+                        entries
+                    </div>
+                    <div>
+                        {{ $data_mhs->links('pagination::bootstrap-4') }}
+                    </div>
+                    </div>
+                </div>
+            </div>
+            </div>
 
         <!---- Data Pertemuan ---->
         <div class="card">
@@ -125,11 +158,7 @@
                 </div>
                 <div class="col-3">
                     <p class="mb-0">
-<<<<<<< HEAD
                         <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2"><img style="width:70%" src="../img/dropdown.png"></button>
-=======
-                        <button class="btn btn-sm btn-outline-primary float-right" type="button" data-toggle="collapse" data-target="#multiCollapse2" aria-expanded="false" aria-controls="multiCollapse2">v</button>
->>>>>>> 9625280758d056ffc0aa7a900414547e69455627
                     </p>
                 </div>
             </div>

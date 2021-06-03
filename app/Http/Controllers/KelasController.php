@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Pertemuan;
 use App\Models\Mahasiswa;
+use App\Models\Krs;
 
 class KelasController extends Controller
 {
@@ -18,6 +19,22 @@ class KelasController extends Controller
     {
         $data_kelas = Kelas::orderby('tahun','desc')->orderby('semester','desc')->paginate(5);
         return view('admin.kelas.index', ['data_kelas' => $data_kelas]);
+    }
+
+
+    public function store_peserta(Request $request, $id){
+        $request->request->add(['kelas_id' => $id]);
+        Krs::create([
+            'kelas_id' => $request->kelas_id,
+            'mahasiswa_id' => $request->mahasiswa_id,
+        ]);
+        return redirect()->back();
+    }
+
+    public function hapus_peserta($mahasiswa_id)
+    {
+       
+
     }
 
     /**
@@ -75,8 +92,19 @@ class KelasController extends Controller
                                     ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
                                     ->where('krs.kelas_id', $kelas_id)
                                     ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
-                                    ->get();
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert', 'data_mhs'));
+                                    ->paginate(5);
+        
+        $peserta = Mahasiswa::join('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+                            ->where('krs.kelas_id', $kelas_id)
+                            ->select('mahasiswa.mahasiswa_id')
+                            ->get()->toArray();
+                                    
+        $non_peserta = Mahasiswa::leftjoin('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+                                ->whereNotIn('mahasiswa.mahasiswa_id', $peserta)
+                                ->select('mahasiswa.mahasiswa_id', 'mahasiswa.nama', 'mahasiswa.nim', 'krs.krs_id')
+                                ->get();
+
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mhs', 'non_peserta')); 
     }
 
     /**

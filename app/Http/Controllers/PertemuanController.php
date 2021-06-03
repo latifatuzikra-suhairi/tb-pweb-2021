@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Pertemuan;
 use App\Models\Kelas;
 use App\Models\Krs;
 use App\Models\Absensi;
 use App\Models\Mahasiswa;
-use Carbon\Carbon;
+
 
 class PertemuanController extends Controller
 {
@@ -23,15 +22,15 @@ class PertemuanController extends Controller
         $kelas = Kelas::findOrFail($kelas_id);
         $pertemuan = Pertemuan::findOrFail($pertemuan_id);
 
-        $data_mhs = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                                ->leftjoin('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
-                                ->where('krs.kelas_id', $kelas_id)
-                                ->where(function($query) use ($pertemuan_id){
-                                    $query->where('absensi.pertemuan_id', $pertemuan_id)
-                                    ->orWhereNull('absensi.pertemuan_id');
-                                })->get();    
+        $hadir = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                            ->join('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
+                            ->where('absensi.pertemuan_id', '=', $pertemuan_id)
+                            ->where('krs.kelas_id', '=', $kelas_id)
+                            ->get();
+        
+        // $absen = Absensi::rightjoin('krs')
 
-        return view('admin.pertemuan.detail', compact('data_mhs', 'kelas', 'pertemuan'));
+        return view('admin.pertemuan.detail', compact('hadir', 'kelas', 'pertemuan'));
     }
 
     /**
@@ -99,58 +98,55 @@ class PertemuanController extends Controller
 
     public function upload(Request $request, $kelas_id, $pertemuan_id)
     {
-        // $request->validate([
-        //     'file' => 'required|file'
-        // ],
-        // [  
-        //     'file.required' => 'Anda belum mengunggah file'
-        // ]);
+        $request->validate([
+            'file' => 'required|file'
+        ],
+        [  
+            'file.required' => 'Anda belum mengunggah file'
+        ]);
         
         $getFile = $request->file('file');
 
-        if (($file = fopen($getFile, "r")) !== FALSE) {
-            $skipLines = 6;
-            $lineStart = 1;
-            while(fgetcsv($file)){
-                if($lineStart > $skipLines){
-                    break;
+        $fileName = $getFile->getClientOriginalName();
+        $ekstensiFile = explode('.', $fileName);
+        $ekstensiFile = strtolower(end($ekstensiFile));
+
+        $filePath = $getFile->getRealPath();
+
+        if($ekstensiFile == "csv"){
+            $file = fopen($filePath, 'r');
+                $lineStart = 1;
+                $skipLines = 7;
+                while(fgetcsv($file)){
+                    if($lineStart > $skipLines){
+                        break;
+                    }
+                    $lineStart++;
                 }
-                $lineStart++;
-            }
 
-            while (($col = fgetcsv($file, 1000, "\t")) !== FALSE) {
-                {
-                    if (isset($col[1])) {
-                        $coljointime = $col[1];
-                        $pcsjointime = preg_split('/[, ]/', $coljointime);
-                        $jam_masuk = $pcsjointime[2];
-                    }
-    
-                    if (isset($col[2])) {
-                        $colleavetime = $col[2];
-                        $pcsleavetime = preg_split('/[, ]/', $colleavetime);
-                        $jam_keluar = $pcsleavetime[2];
-                        // $leave= strtotime($jam_keluar);
-                    }
-
-                    if (isset($col[3])) {
-                        $duration = $col[3];
-                    }
-
-                    if (isset($column[4])) {
-                        $colemail = $column[4];
-                    }
-    
-                    
-                    // ($jam_masuk); 
-                    var_dump($jam_keluar);
-                    var_dump($duration);       
-                    
-            }
+                // //header
+                // $header = fgetcsv($file, 1000, "\t");
+                // $escapedHeader= [];
                 
-            }
-            
-        }
+                // foreach($header as $key => $value){
+                //     $lheader = strtolower($value);
+                //     $escapeItem = preg_replace('/[^a-z]/', '', $lheader);
+                //     array_push($escapedHeader, $escapeItem);
+                // }
+                // dd($escapedHeader);
+                
+                $data = [];
+                $row = 0;
+                while(($cols = fgetcsv($file, 1000, "\t"))!== FALSE){
+                    $num = count($cols);
+                    $num--;
+                        
+                    }
+                    $row++;
+                }     
+        // else{
+        //     return redirect()->with('psn_gagal', 'File harus berupa csv!');
+        // }
     }
 
     /**
