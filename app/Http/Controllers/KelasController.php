@@ -5,11 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Pertemuan;
-<<<<<<< HEAD
-use App\Models\Krs;
-=======
 use App\Models\Mahasiswa;
->>>>>>> 46ac3e647d46bc5bab6a16fba147962b3437f282
+use App\Models\Krs;
 
 class KelasController extends Controller
 {
@@ -78,20 +75,9 @@ class KelasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-
-
-
-     
-
     public function show($kelas_id)
     {
-        $data_mahasiswa = \App\models\mahasiswa::all();
         $data_kelas = Kelas::findOrFail($kelas_id);
-<<<<<<< HEAD
-        $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mahasiswa')); 
-=======
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)
                                 ->orderBy('pertemuan_ke', 'asc')
                                 ->get();
@@ -100,17 +86,20 @@ class KelasController extends Controller
                                     ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
                                     ->where('krs.kelas_id', $kelas_id)
                                     ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
-                                    ->get();
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert', 'data_mhs'));
->>>>>>> 46ac3e647d46bc5bab6a16fba147962b3437f282
+                                    ->paginate(5);
+        
+        $peserta = Mahasiswa::join('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+                            ->where('krs.kelas_id', $kelas_id)
+                            ->select('mahasiswa.mahasiswa_id')
+                            ->get()->toArray();
+                                    
+        $non_peserta = Mahasiswa::leftjoin('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+                                ->whereNotIn('mahasiswa.mahasiswa_id', $peserta)
+                                ->select('mahasiswa.mahasiswa_id', 'mahasiswa.nama', 'mahasiswa.nim', 'krs.krs_id')
+                                ->get();
+
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mhs', 'non_peserta')); 
     }
-
-
-
-
-
-
-
 
     /**
      * Show the form for editing the specified resource.

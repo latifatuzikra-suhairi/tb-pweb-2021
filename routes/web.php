@@ -57,12 +57,9 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function(){
     Route::post('/kelas/store', [KelasController::class, 'store']); //simpan kelas
     Route::get('/kelas/{kelas_id}/edit', [KelasController::class, 'edit']); //info detail kelas
     Route::match(['get', 'post'], '/kelas/{kelas_id}/update', [KelasController::class, 'update']);//update kelas
-<<<<<<< HEAD
     Route::get('/kelas/{kelas_id}/detail', [KelasController::class, 'show']);
     Route::post('/kelas/{id}/store', [KelasController::class, 'store_peserta']);
 
     Route::get('/krs/{kelas_id}/create', [KrsController::class, 'create'])->name('tambah.peserta'); //form peserta kelas
-=======
->>>>>>> 46ac3e647d46bc5bab6a16fba147962b3437f282
 
 });

@@ -97,7 +97,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($data_mhs as $data)
+                    @foreach ($hadir as $data)
+                    <?php
+                        $jam = floor($data->durasi / 3600);
+                        $menit = floor(($data->durasi / 60) % 60);
+                        $detik = $data->durasi % 60;
+                    ?>
                     <tr style="font-size: 16px">
                         <td scope="row" class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $data->nama }}</td>
@@ -108,10 +113,6 @@
                         @endif
                         <td>{{ $data->jam_masuk }}</td>
                         <td>{{ $data->jam_keluar }}</td>
-                        <?php 
-                            $jam=floor(($data->durasi)/ (60*60));
-                            $menit= floor((($data->durasi)-($jam*3600))/60);
-                        ?>
                         <td>{{ $jam }} jam {{$menit}} menit</td>
                     </tr>
                     @endforeach
