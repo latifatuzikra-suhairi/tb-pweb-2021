@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Pertemuan;
 use App\Models\Kelas;
+use App\Models\Krs;
 use App\Models\Absensi;
 use App\Models\Mahasiswa;
+use Carbon\Carbon;
 
 class PertemuanController extends Controller
 {
@@ -20,18 +23,15 @@ class PertemuanController extends Controller
         $kelas = Kelas::findOrFail($kelas_id);
         $pertemuan = Pertemuan::findOrFail($pertemuan_id);
 
-        // $datas = Mahasiswa::join('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
-        //                     ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
-        //                     ->leftjoin('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
-        //                     ->leftjoin('pertemuan', 'absensi.pertemuan_id', '=', 'pertemuan.pertemuan_id')
-        //                     ->where('absensi.kelas_id', $kelas_id)
-        //                     ->get();
+        $data_mhs = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                                ->leftjoin('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
+                                ->where('krs.kelas_id', $kelas_id)
+                                ->where(function($query) use ($pertemuan_id){
+                                    $query->where('absensi.pertemuan_id', $pertemuan_id)
+                                    ->orWhereNull('absensi.pertemuan_id');
+                                })->get();    
 
-        $datas = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                            ->leftjoin('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
-                            ->get();
-        //view('admin.pertemuan.detail', compact('datas', 'kelas', 'pertemuan'));                          
-        return dd($datas);
+        return view('admin.pertemuan.detail', compact('data_mhs', 'kelas', 'pertemuan'));
     }
 
     /**
@@ -41,7 +41,8 @@ class PertemuanController extends Controller
      */
     public function create($kelas_id)
     {   
-        return view('admin.pertemuan.tambah', compact('kelas_id'));
+        $kelas = Kelas::findOrFail($kelas_id);
+        return view('admin.pertemuan.tambah', compact('kelas'));
     }
 
     /**
@@ -55,30 +56,100 @@ class PertemuanController extends Controller
         $request->validate([
             'pertemuan_ke' => 'required',
             'tanggal' => 'required',
-            'materi' => 'max:70'
+            'materi' => 'required|max:50'
         ], [
             'pertemuan_ke.required' => 'Pertemuan tidak boleh kosong',
             'tanggal.required' => 'Tanggal Pertemuan tidak boleh kosong',
-            'materi.max' => 'Maksimal penjabaran materi hanya 70 Karakter'
+            'materi.required' => 'Materi Pertemuan tidak boleh kosong',
+            'materi.max' => 'Maksimal penjabaran materi hanya 50 Karakter'
         ]);
 
+        //cek tahun sama dengan tahun sekarang atau tidak
+        $thn_skrg = date('Y');
+        $input_tahun = $request->tanggal;
+        $cek_tahun = substr($input_tahun, 0, 4);
+
         //cek udah ada pertemuan yang dimaksud atau belum
-        $cek = Pertemuan::where('kelas_id', $request->kelas_id)
+        $cek_pert = Pertemuan::where('kelas_id', $request->kelas_id)
                             ->where('pertemuan_ke', $request->pertemuan_ke)
                             ->doesntExist();
-        if($cek == true)
+        if($thn_skrg == $cek_tahun)
         {
-             if(Pertemuan::create($request->all()))
-             {
-                 return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_sukses', 'Pertemuan Berhasil Ditambahkan!');
-             }
-             else
-             {
-                 return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Pertemuan Gagal Ditambahkan!');
-             }
+            if($cek_pert == true)
+            {
+                if(Pertemuan::create($request->all()))
+                {
+                    return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_sukses', 'Pertemuan Berhasil Ditambahkan!');
+                }
+                else
+                {
+                    return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Pertemuan Gagal Ditambahkan!');
+                }
+            }
+            else{
+                return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Pertemuan ke-'.$request->pertemuan_ke.' telah diadakan!');
+            } 
         }
-        else{
-            return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Pertemuan ke-'.$request->pertemuan_ke.' telah diadakan!');
+        else
+        {
+            return redirect()->route('detail.kelas', [$request->kelas_id])->with('psn_gagal', 'Tanggal Pertemuan Tidak Valid');
+        }
+    }
+
+
+    public function upload(Request $request, $kelas_id, $pertemuan_id)
+    {
+        // $request->validate([
+        //     'file' => 'required|file'
+        // ],
+        // [  
+        //     'file.required' => 'Anda belum mengunggah file'
+        // ]);
+        
+        $getFile = $request->file('file');
+
+        if (($file = fopen($getFile, "r")) !== FALSE) {
+            $skipLines = 6;
+            $lineStart = 1;
+            while(fgetcsv($file)){
+                if($lineStart > $skipLines){
+                    break;
+                }
+                $lineStart++;
+            }
+
+            while (($col = fgetcsv($file, 1000, "\t")) !== FALSE) {
+                {
+                    if (isset($col[1])) {
+                        $coljointime = $col[1];
+                        $pcsjointime = preg_split('/[, ]/', $coljointime);
+                        $jam_masuk = $pcsjointime[2];
+                    }
+    
+                    if (isset($col[2])) {
+                        $colleavetime = $col[2];
+                        $pcsleavetime = preg_split('/[, ]/', $colleavetime);
+                        $jam_keluar = $pcsleavetime[2];
+                        // $leave= strtotime($jam_keluar);
+                    }
+
+                    if (isset($col[3])) {
+                        $duration = $col[3];
+                    }
+
+                    if (isset($column[4])) {
+                        $colemail = $column[4];
+                    }
+    
+                    
+                    // ($jam_masuk); 
+                    var_dump($jam_keluar);
+                    var_dump($duration);       
+                    
+            }
+                
+            }
+            
         }
     }
 

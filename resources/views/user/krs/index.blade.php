@@ -11,7 +11,10 @@
 @section('content')
     <div class="container">
 
-        <h1>Daftar Kelas</h1>
+        <div class="border-bottom">
+            <br>
+            <h2><b>Daftar Kelas</b></h2>
+        </div>
 
         {{-- Table Kelas --}}
         <table class="table table-striped table-hover">
@@ -19,7 +22,7 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Kode Kelas</th>
-            <th scope="col">Nama Mata Kuliah</th>
+            <th scope="col">Mata Kuliah</th>
             <th scope="col">Tahun</th>
             <th scope="col">Semester</th>
             <th scope="col">Aksi</th>
@@ -34,7 +37,7 @@
             <td>{{ $krs->tahun }}</td>
             <td>{{ $krs->semester }}</td>
             <td>
-              <a href="/krs/{{$krs->kode_kelas}}/detail" class="btn btn-primary">Detail</a>
+              <a href="/krs/{{ $krs->kelas_id }}/detail" class="btn btn-primary">Detail</a>
             </td>
           </tr>
           @endforeach

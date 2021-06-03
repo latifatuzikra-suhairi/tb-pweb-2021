@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kelas;
 use App\Models\Pertemuan;
+<<<<<<< HEAD
 use App\Models\Krs;
+=======
+use App\Models\Mahasiswa;
+>>>>>>> 46ac3e647d46bc5bab6a16fba147962b3437f282
 
 class KelasController extends Controller
 {
@@ -16,7 +20,7 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $data_kelas = Kelas::all();
+        $data_kelas = Kelas::orderby('tahun','desc')->orderby('semester','desc')->paginate(5);
         return view('admin.kelas.index', ['data_kelas' => $data_kelas]);
     }
 
@@ -84,8 +88,21 @@ class KelasController extends Controller
     {
         $data_mahasiswa = \App\models\mahasiswa::all();
         $data_kelas = Kelas::findOrFail($kelas_id);
+<<<<<<< HEAD
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)->get();
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mahasiswa'));
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mahasiswa')); 
+=======
+        $data_pert = Pertemuan::where('kelas_id', $kelas_id)
+                                ->orderBy('pertemuan_ke', 'asc')
+                                ->get();
+
+        $data_mhs = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                                    ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
+                                    ->where('krs.kelas_id', $kelas_id)
+                                    ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
+                                    ->get();
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert', 'data_mhs'));
+>>>>>>> 46ac3e647d46bc5bab6a16fba147962b3437f282
     }
 
 

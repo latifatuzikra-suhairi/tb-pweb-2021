@@ -14,7 +14,7 @@
         <h1>Daftar Kelas</h1>
 
         {{-- Btn Tambah Kelas --}}
-        <a href="/kelas/create" class="btn btn-primary" >Tambah Kelas</a>
+        <a type="button" class="btn btn-primary mb-3" href="/kelas/create">Tambah Kelas</a>
         <br>
         @if (session('status'))
         <br>
@@ -30,7 +30,7 @@
             <table class="table table-bordered dataTabel">
         <thead>
           <tr>
-            <th scope="col">#</th>
+            
             <th scope="col">Kode Kelas</th>
             <th scope="col">Tahun</th>
             <th scope="col">Semester</th>
@@ -40,12 +40,12 @@
         <tbody>
           @foreach ($data_kelas as $kelas)
           <tr>
-            <th scope="row">{{ $loop->iteration }}</th>
+            
             <td>{{ $kelas->kode_kelas }}</td>
             <td>{{ $kelas->tahun }}</td>
             <td>{{ $kelas->semester }}</td>
             <td>
-              <a href="/kelas/{{ $kelas->kelas_id }}/detail" class="btn btn-info">Detail</a>
+              <a href="/kelas/{{ $kelas->kelas_id }}" class="btn btn-info">Detail</a>
               <a href="/kelas/{{ $kelas->kelas_id }}/edit" class="btn btn-primary">Edit</a>
               <!--<a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$kelas->kelas_id}}">Hapus</a>-->
             
@@ -61,6 +61,18 @@
           @endforeach
         </tbody>
       </table> 
+      <div>
+        Showing
+        {{$data_kelas->firstItem()}}
+        to
+        {{$data_kelas->lastItem()}}
+        of
+        {{$data_kelas->total()}}
+        entries
+      </div>
+      <div>
+        {{ $data_kelas->links('pagination::bootstrap-4') }}
+      </div>
       </div>
     </div>
   </div>

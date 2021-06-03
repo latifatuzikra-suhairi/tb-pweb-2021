@@ -19,9 +19,9 @@ class CreateAbsensiTable extends Migration
             $table->foreign('krs_id')->references('krs_id')->on('krs');
             $table->integer('pertemuan_id')->nullable($value=false);
             $table->foreign('pertemuan_id')->references('pertemuan_id')->on('pertemuan');
-            $table->time('jam_masuk')->nullable($value=true);
-            $table->time('jam_keluar')->nullable($value=true);
-            $table->integer('durasi')->nullable($value=true);
+            $table->time('jam_masuk')->nullable($value=false);
+            $table->time('jam_keluar')->nullable($value=false);
+            $table->integer('durasi')->nullable($value=false);
         });
     }
 
