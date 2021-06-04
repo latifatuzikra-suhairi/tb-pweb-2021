@@ -8,22 +8,28 @@ use App\Models\Mahasiswa;
 use App\Models\Krs;
 use App\Models\Pertemuan;
 use App\Models\Absensi;
+use Carbon\Carbon;
 
 class KrsController extends Controller
 {
     public function info_krs (){
         $userlog=auth()->user()->id;
-        $max_semester = DB::table('krs')
+        $year = Carbon::now()->format('Y');
+
+        $min_semester = DB::table('krs')
                     -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
                     -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
                     -> where ('mahasiswa.id', $userlog)
-                    -> max ('semester');
+                    -> where ('kelas.tahun', $year)
+                    -> min ('semester');
 
         $info_kelas = DB::table('krs')
-                    -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
-                    -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                    -> where ('semester', $max_semester)
-                    -> count();
+                        -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                        -> join ('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                        -> where ('mahasiswa.id', $userlog)
+                        -> where ('semester', $min_semester)
+                        -> where ('tahun', $year)
+                        -> count();
 
         $info_sks = DB::table('krs')
                     -> join ('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
