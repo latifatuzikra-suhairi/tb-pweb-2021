@@ -33,8 +33,8 @@ class KelasController extends Controller
 
     public function hapus_peserta($krs_id)
     {
-        $peserta = Krs::where('krs_id',$krs_id)->delete();
-        return redirect()->back()->with('status', 'Data Peserta Berhasil Dihapus');
+        //$peserta = Krs::where('krs_id',$krs_id)->delete();
+        //return redirect()->back()->with('status', 'Data Peserta Berhasil Dihapus');
     }
 
     /**

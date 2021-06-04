@@ -21,7 +21,7 @@
         <form action="/kelas/{{ $data_kelas->kelas_id }}/update" method="POST">
                         @csrf
                         <div class="form-group">
-                        <label for="kode_kelas">Kode Kelas</label> disabled
+                        <label for="kode_kelas">Kode Kelas</label>
                         <input type="text" class="form-control @error('kode_kelas') is-invalid @enderror" placeholder="Masukkan Kode Kelas" id="kode_kelas" name="kode_kelas" value="{{ $data_kelas->kode_kelas }}" disabled> 
                         @error ('kode_kelas')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
