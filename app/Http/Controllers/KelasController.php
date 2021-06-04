@@ -23,19 +23,24 @@ class KelasController extends Controller
 
 
     public function store_peserta(Request $request, $id){
+        $request->validate([
+            'mahasiswa_id' => 'required',
+        ], [
+            'mahasiswa_id.required' => 'Pilih Nama Mahasiswa',
+       
+        ]);
+
+        if($request->isMethod('post')){
         $request->request->add(['kelas_id' => $id]);
         Krs::create([
             'kelas_id' => $request->kelas_id,
             'mahasiswa_id' => $request->mahasiswa_id,
         ]);
         return redirect()->back();
+        }
     }
 
-    public function hapus_peserta($krs_id)
-    {
-        //$peserta = Krs::where('krs_id',$krs_id)->delete();
-        //return redirect()->back()->with('status', 'Data Peserta Berhasil Dihapus');
-    }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -71,18 +76,8 @@ class KelasController extends Controller
             'sks.required' => 'Sks tidak boleh kosong',
         ]);
 
-        $cekkelas = Kelas::where('kode_kelas', $request->kode_kelas)
-        ->where('kode_makul',$request->kode_makul)
-        ->where('tahun', $request->tahun)
-        ->doesntExist();
-        if($cekkelas == true){
-            Kelas::create($request->all());
-            return redirect('/kelas')->with('status', 'Data Kelas Berhasil Ditambahkan !');
-            
-        }else{
-            return redirect('/kelas')->with('status', 'Data Kelas Gagal Ditambahkan !');
-        }
-        
+        Kelas::create($request->all());
+        return redirect('/kelas')->with('status', 'Data Kelas Berhasil Ditambahkan');
     }
 
     /**
@@ -101,7 +96,7 @@ class KelasController extends Controller
         $data_mhs = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
                                     ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
                                     ->where('krs.kelas_id', $kelas_id)
-                                    ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
+                                    ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim', 'krs.kelas_id')
                                     ->paginate(5);
         
         $peserta = Mahasiswa::join('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
@@ -162,6 +157,23 @@ class KelasController extends Controller
             }
     }
 
+    public function hapus_peserta($kelas_id, $mahasiswa_id)
+    {
+       
+        // $krs = Krs::where('id','=',$id, 'AND', 'mahasiswa_id', '=', $mahasiswa_id)->delete();
+        // return redirect()->back();
+        // $krs =Krs::where('kelas_id', $kelas_id)
+        // ->where('mahasiswa_id', $mahasiswa_id)->get();
+
+        // foreach($krs as $krs)
+        // {
+        // $krs->delete();
+        // }
+        Krs::where('kelas_id', $kelas_id)
+        ->where('mahasiswa_id', $mahasiswa_id)
+        ->delete();
+        return redirect()->back();
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -170,6 +182,7 @@ class KelasController extends Controller
      */
     public function destroy($kelas_id)
     {
+       
         $data_kelas = Kelas::find($kelas_id);
         $data_kelas->delete();
         return redirect('/kelas')->with('status', 'Data Kelas Berhasil Dihapus');

@@ -64,7 +64,7 @@ Route::group(['middleware' => ['auth', 'checkRole:admin']], function(){
     Route::get('/kelas/{kelas_id}/detail', [KelasController::class, 'show']);
     Route::post('/kelas/{id}/store', [KelasController::class, 'store_peserta']);
 
-    //Route::delete('/kelas/{kelas_id}/{mahasiswa_id}/hapus_peserta', [KelasController::class, 'hapus_peserta']);
+    Route::delete('/kelas/{kelas_id}/{mahasiswa_id}/hapus_peserta', [KelasController::class, 'hapus_peserta'])->name('detail.hapus');
 
     Route::get('/krs/{kelas_id}/create', [KrsController::class, 'create'])->name('tambah.peserta'); //form peserta kelas
 
