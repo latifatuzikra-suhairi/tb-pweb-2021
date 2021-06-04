@@ -86,7 +86,7 @@
             </div>
             <div id="multiCollapse1" class="collapse multi-collapse">
                 <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
-                    <form action="/kelas/{{$data_kelas->kelas_id}}/store" method="post">
+                <form action="/kelas/{{$data_kelas->kelas_id}}/store" method="post">
                         @csrf
                         <select name="mahasiswa_id" class="form-select form-select-md" aria-label=".form-select-md example"> 
                         <option value="" hidden>-- Pilih Mahasiswa --</option>

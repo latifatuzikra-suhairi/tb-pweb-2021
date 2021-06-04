@@ -1,4 +1,4 @@
-<form action="/kelas/{{$mhs->kelas_id}}/{{$mhs->mahasiswa_id }}/hapus_mahasiswa" method="post" class="d-inline">
+<form action="{{ route('detail.hapus', [$data_kelas->kelas_id, $mhs['mahasiswa_id']]) }}" method="post" class="d-inline">
 @method('delete')
 @csrf
               
