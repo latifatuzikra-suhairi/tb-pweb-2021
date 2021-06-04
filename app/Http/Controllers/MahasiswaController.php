@@ -112,7 +112,7 @@ class MahasiswaController extends Controller
         $u = User::find($id);
         $request->validate([
             'nama' => 'required',
-            'nim' => 'required|unique:users,username,'.$u->id.',id', 
+            'nim' => 'required|size:10|unique:users,username,'.$u->id.',id', 
             'email' => 'required|unique:users,email,'.$u->id.',id', 
         ], [
             'nama.required' => 'Nama tidak boleh kosong',
