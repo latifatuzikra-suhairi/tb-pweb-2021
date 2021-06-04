@@ -78,8 +78,7 @@
                 </div>
                 <div class="col-3">
                     <p class="mb-0">
-                        <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:70%" src="../img/dropdown.png"></button>
-
+                    <button class="btn btn-md float-right" style="background-color: rgb(171, 181, 196, 0.4)" type="button" data-toggle="collapse" data-target="#multiCollapse1" aria-expanded="false" aria-controls="multiCollapse1"><img style="width:100%" src="/img/dropdown.png"></button>
                     </p>
                 </div>
             </div>
@@ -107,29 +106,31 @@
                                 <td >{{ $hadir->pertemuan_ke }}</td>
                                 <td>{{ date('d M Y', strtotime($hadir->tanggal)) }}</td>
                                 <td>{{ $hadir->materi }}</td>
-                                <!-- Status Kehadiran  -->
-                                @if($hadir->jam_masuk != null)
+
+                                <!-- Status Kehadiran   -->
+                                @if($hadir->pertemuan_id != null)
                                     <td>{{ "Hadir" }}</td>
                                 @else
                                     <td>{{ "Tidak Hadir" }}</td>
                                 @endif 
-                                <!-- Jam Masuk  -->
-                                @if($hadir->jam_masuk != null)
+                                
+                                <!-- Jam masuk, jam keluar, durasi -->
+                                <?php
+                                    $durasi=$hadir->durasi;
+                                    $jam=floor($durasi /(60*60));
+                                    $menit=floor((($durasi)-($jam*3600))/60);
+                                    $detik=$durasi-($jam*3600)-($menit*60);
+                                ?>
+                                @if($durasi!=0)
                                     <td>{{ $hadir->jam_masuk}}</td>
-                                @else
-                                    <td>{{ "-" }}</td>
-                                @endif 
-                                <!-- Jam Keluar  -->
-                                @if($hadir->jam_masuk != null)
                                     <td>{{ $hadir->jam_keluar }}</td>
+                                    <td>{{$jam}}h {{$menit}}m {{$detik}}s</td>
                                 @else
                                     <td>{{ "-" }}</td>
-                                @endif 
-                                <!-- durasi -->
-                                <td>    
-                                    {{ $jam=floor($hadir->durasi /(60*60)) }} jam 
-                                    {{ floor((($hadir->durasi) - ($jam*3600))/60) }} menit
-                                </td>
+                                    <td>{{ "-" }}</td>
+                                    <td>{{ "-" }}</td>
+                                @endif  
+                                
                             </tr>
                         @endforeach         
                         </tbody>

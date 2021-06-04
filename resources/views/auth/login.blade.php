@@ -23,7 +23,7 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <input type="text" id="login" class="fadeIn second" name="username" placeholder="Username" value="{{ old('username') }}" required>
-                <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password" required>
+                <input type="text" id="password" class="fadeIn third" name="password" placeholder="Password" autocomplete="off" required>
                 <input type="submit" class="fadeIn fourth" value="Log In">
             </form>
 

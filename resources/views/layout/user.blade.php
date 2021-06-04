@@ -33,10 +33,9 @@
                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Link Terkait</a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                      <a class="dropdown-item" href="http://portal.unand.ac.id/">Portal Akademik</a>
-                     <a class="dropdown-item" href="https://akademik.unand.ac.id/sipena/">Sipena Unand</a>
-                     <a class="dropdown-item" href="https://ilearn.unand.ac.id/">Ilearn Fakultas Unand</a>
-                     <a class="dropdown-item" href="https://mkdu.ilearn.unand.ac.id/">Ilearn MKDU Unand</a>
-                     <a class="dropdown-item" href="http://merdeka.akademik.unand.ac.id/mbkm/">MBKM Unand</a>
+                     <a class="dropdown-item" href="http://merdeka.akademik.unand.ac.id/mbkm/">Portal MBKM</a>
+                     <a class="dropdown-item" href="https://akademik.unand.ac.id/sipena/">Layanan Akademik</a>
+                     <a class="dropdown-item" href="https://ilearn.unand.ac.id/">Ilearn Fakultas</a>
                   </div>
             </li>
             <li class="nav-item">
@@ -45,7 +44,7 @@
          </ul>
          <ul class="navbar-nav navbar-profile">
             <li class="nav-item dropdown">
-               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Profile</a>
+               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ current(explode(' ', auth()->user()->name))  }}</a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                      <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                            document.getElementById('logout-form').submit();">Logout</a>

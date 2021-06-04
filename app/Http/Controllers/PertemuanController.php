@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Pertemuan;
 use App\Models\Kelas;
@@ -12,11 +12,7 @@ use App\Models\Mahasiswa;
 
 class PertemuanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index($kelas_id, $pertemuan_id)
     {
         $kelas = Kelas::findOrFail($kelas_id);
@@ -33,23 +29,14 @@ class PertemuanController extends Controller
         return view('admin.pertemuan.detail', compact('hadir', 'kelas', 'pertemuan'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create($kelas_id)
     {   
         $kelas = Kelas::findOrFail($kelas_id);
         return view('admin.pertemuan.tambah', compact('kelas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {   
         $request->validate([
@@ -104,7 +91,7 @@ class PertemuanController extends Controller
         [  
             'file.required' => 'Anda belum mengunggah file'
         ]);
-        
+
         $getFile = $request->file('file');
 
         $fileName = $getFile->getClientOriginalName();
@@ -124,51 +111,64 @@ class PertemuanController extends Controller
                     $lineStart++;
                 }
 
-                // //header
-                // $header = fgetcsv($file, 1000, "\t");
-                // $escapedHeader= [];
-                
-                // foreach($header as $key => $value){
-                //     $lheader = strtolower($value);
-                //     $escapeItem = preg_replace('/[^a-z]/', '', $lheader);
-                //     array_push($escapedHeader, $escapeItem);
-                // }
-                // dd($escapedHeader);
-                
-                $data = [];
+                $data = array();
                 $row = 0;
-                while(($cols = fgetcsv($file, 1000, "\t"))!== FALSE){
+                while(($cols = fgetcsv($file, 1000, ";"))!== FALSE){
                     $num = count($cols);
                     $num--;
-                        
+                    for ($c = 0 ; $c < $num ; $c++){
+                        if ($c == 1) {
+                            $data[$row][$c] = explode(",", $cols[$c]);
+                                if ($c == 1) {
+                                    $data[$row][$c] = explode(" ", $cols[$c]);
+                                }
+                        }
+                        if ($c == 2) {
+                            $data[$row][$c] = explode(",",$cols[$c]);
+                            if ($c == 2) {
+                                $data[$row][$c] = explode(" ", $cols[$c]);
+                            }
+                        }
+
+                        $data[$row][] = $cols[$c];
                     }
                     $row++;
-                }     
-        // else{
-        //     return redirect()->with('psn_gagal', 'File harus berupa csv!');
-        // }
-    }
+                }
+                $check = count ($data);
+                
+                foreach ($data as $dt) {
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show()
-    {
-        //
-    }
+                    $cek = DB::table('krs')
+                            ->join('mahasiswa', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+                            ->join('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                            ->where('kelas.kelas_id', $kelas_id)
+                            ->where('mahasiswa.email', $dt[5])
+                            ->get('krs.krs_id');
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+                    $jml = count($cek);
+
+                    $durasi=(strtotime($dt[2][1])-strtotime($dt[1][1]));
+
+                    if($jml > 0){
+
+                        foreach ($cek as $c) {
+
+                            Absensi::firstOrCreate([
+                                'krs_id' => $c->krs_id,
+                                'pertemuan_id' => $pertemuan_id,
+                                'jam_masuk' => $dt[1][1],
+                                'jam_keluar' =>$dt[2][1],
+                                'durasi' => (int)$durasi
+                            ]);
+
+                        }
+
+                    }
+                }
+                return redirect()->back();
+        } else {
+            return redirect()->back()->with('alertImport', 'Upload File dengan Ekstensi .csv');
+        }    
     }
 
 }

@@ -59,7 +59,7 @@
             Daftar Hadir Mahasiswa
         </div>
         <div class="card-body">
-            @if (count($errors) > 0)
+            @if (count($errors) > 0 )
             <div class="alert alert-danger">
                 <strong>Whoops!</strong> Terdapat Masalah Pada File Anda!
                 <ul>
@@ -69,7 +69,14 @@
                 </ul>
             </div>
             @endif
-                
+
+            @if (session('alertImport'))
+                <div class="alert alert-danger">
+                    <strong>Whoops!</strong> Terdapat Masalah Pada File Anda!
+                    <li>{{ session('alertImport')}}</li>
+                </div>
+            @endif 
+
             <form method="POST" enctype="multipart/form-data" action="{{ route('upload.pertemuan', [$kelas->kelas_id, $pertemuan->pertemuan_id]) }}">
                 @csrf
                 <div class="form-group table-responsive">
@@ -111,9 +118,15 @@
                         @else
                             <td>{{ "Hadir" }}</td> 
                         @endif
-                        <td>{{ $data->jam_masuk }}</td>
-                        <td>{{ $data->jam_keluar }}</td>
-                        <td>{{ $jam }} jam {{$menit}} menit</td>
+                        @if($data->durasi!=0)
+                            <td>{{ $data->jam_masuk}}</td>
+                            <td>{{ $data->jam_keluar }}</td>
+                            <td>{{$jam}}h {{$menit}}m {{$detik}}s</td>
+                        @else
+                            <td>{{ "-" }}</td>
+                            <td>{{ "-" }}</td>
+                            <td>{{ "-" }}</td>
+                        @endif  
                     </tr>
                     @endforeach
                 </tbody>

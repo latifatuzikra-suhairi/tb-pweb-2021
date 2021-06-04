@@ -40,11 +40,6 @@ class KrsController extends Controller
         return view('user.dashboard', compact('info_kelas', 'info_sks', 'info_makul', 'userlog'));
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $userlog=auth()->user()->id;
@@ -79,25 +74,21 @@ class KrsController extends Controller
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($kelas_id)
     {
         $userlog=auth()->user()->id;
         $data_kelas = Kelas::find($kelas_id);
-        $list_hadir=DB::table('absensi')
-                        ->join('pertemuan', 'pertemuan.pertemuan_id', '=', 'absensi.pertemuan_id')
-                        ->join('krs', 'krs.krs_id', '=', 'absensi.krs_id')
-                        ->join('kelas', 'kelas.kelas_id', '=', 'pertemuan.kelas_id')
-                        ->join('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                        ->where ('mahasiswa.id', $userlog)
-                        ->where ('kelas.kelas_id', $kelas_id)
-                        ->orderBy ('tanggal', 'asc')
-                        ->get();
+        $list_hadir=DB::table('kelas')
+                        -> join('krs', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                        -> join('mahasiswa', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                        -> join('pertemuan', 'kelas.kelas_id', '=', 'pertemuan.kelas_id')
+                        -> leftjoin('absensi', function($query){
+                            $query->on('pertemuan.pertemuan_id', '=', 'absensi.pertemuan_id');
+                            $query->on('krs.krs_id', '=', 'absensi.krs_id');
+                            })
+                        -> where('kelas.kelas_id', $kelas_id)
+                        -> where('mahasiswa.id', auth()->user()->id)
+                        -> get();
                                                 
         return view('user.krs.detail', compact('data_kelas', 'list_hadir'));
     }
