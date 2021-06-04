@@ -2,7 +2,7 @@
 <style>
 @media (min-width: 992px) { 
     .navbar{
-        background-color: #001543;
+        background-color: #001136;
     }
 }
 </style>
@@ -22,27 +22,16 @@
 @endsection
 
 @section('content')
-    <div class="container">
-
-        @if(session('psn_sukses')){
-            <div class="alert alert-success" role="alert">
-                {{ session('psn_sukses') }}
+    <div class="container mt-4">
+        <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
+            <div class="color: #001136">
+                <h3><b>{{ $data_kelas->nama_makul }}</b></h3>
+                <p class="fs-2">- {{ $data_kelas->kode_makul }}</p>
+                 <div class="batas"></div>
             </div>
-        }   
-        @elseif(session('psn_gagal')){
-            <div class="alert alert-danger" role="alert">
-                {{ session('psn_gagal') }}
-            </div> 
-        }
-        @endif
 
         <!---- Detail Daftar Kelas ---->
-        <div class="border-bottom"><p>
-            <h2><b>{{ $data_kelas->nama_makul }}</b></h2>
-             - {{ $data_kelas->kode_makul }}</p>
-        </div>
-
-        <div>
+        <div class="mt-2 border-top">
             <table class="table table-borderless" style="width:70%">
                 <tr>
                     <td>Kode Kelas</td>
@@ -139,10 +128,6 @@
                 </div>
             </div>
         </div>
-
-
-
-  
-
+    </div>
     </div>
 @endsection

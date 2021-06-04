@@ -2,34 +2,46 @@
 <style>
 @media (min-width: 992px) { 
     .navbar{
-        background-color: #001543;
+        background-color: #001136;
     }
 }
 </style>
 @section('title', 'SIRAH | Kelas')
 
+@section('breadcrumbs')
+<div style="background-color: white; margin-top:-5px"> 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb container" style="background-color: white">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/kelas">Kelas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Kelas</li>
+        </ol>
+    </nav>
+    <div style="border: 2px solid #001136; margin-top:-20px"></div>
+</div>
+@endsection
+
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
       <div class="row">
         <div class="col-8">
-        <h1 class="mt-2">Edit Kelas</h1>
+
+            <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
+                <div class="color: #001136">
+                    <h3 class="mb-2"><b>Edit Kelas</b></h3>
+                    <p class="fs-2">- Kelas {{ $data_kelas->kode_kelas }}</p>
+                     <div class="batas"></div>
+                </div>
  
-        <br>
-        
-        <div class="card mb-4">
+        <div class="card mt-3">
         <div class="card-body">
         <form action="/kelas/{{ $data_kelas->kelas_id }}/update" method="POST">
-                        @csrf
-                        <div class="form-group">
-                        <label for="kode_kelas">Kode Kelas</label> disabled
-                        <input type="text" class="form-control @error('kode_kelas') is-invalid @enderror" placeholder="Masukkan Kode Kelas" id="kode_kelas" name="kode_kelas" value="{{ $data_kelas->kode_kelas }}" disabled> 
-                        @error ('kode_kelas')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
+                    @csrf
                     <div class="form-group">
-                        <label for="kode_makul">Kode Makul</label>
-                        <input type="text" class="form-control @error('kode_makul') is-invalid @enderror" placeholder="Masukkan Kode Makul" id="kode_makul" name="kode_makul" value="{{ $data_kelas->kode_makul }}" disabled> 
-                        @error ('kode_makul')<div class="invalid-feedback">{{ $message }}</div>@enderror
-
+                        <input type="hidden" class="form-control" placeholder="Masukkan Kode Kelas" id="kode_kelas" name="kode_kelas" value="{{ $data_kelas->kode_kelas }}"> 
+                        </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" placeholder="Masukkan Kode Makul" id="kode_makul" name="kode_makul" value="{{ $data_kelas->kode_makul }}"> 
                     </div>
                     <div class="form-group">  
                         <label for="nama_makul">Nama Makul</label>
@@ -79,10 +91,11 @@
                            
                 <button type="submit" class="btn btn-primary">Edit Data</button>
                 </form>  
-        </div>
-        </div>
-        </div>
-        </div>
+            </div>
+            </div>
+            </div>
+     </div>
     </div>
+</div>
 
 @endsection

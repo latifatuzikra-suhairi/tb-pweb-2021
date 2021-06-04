@@ -2,7 +2,7 @@
 <style>
 @media (min-width: 992px) { 
     .navbar{
-        background-color: #001543;
+        background-color: #001136;;
     }
 }
 </style>
@@ -21,14 +21,15 @@
 @endsection
 
 @section('content')
-    <div class="container">
-
-        <div class="border-bottom">
-            <br>
-            <h2><b>Daftar Kelas</b></h2>
+    <div class="container mt-4">
+      <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
+        <div class="color: #001136">
+            <h3><b>Daftar Kelas</b></h3>
+             <div class="batas"></div>
         </div>
 
         {{-- Table Kelas --}}
+        <div class="table-responsive mt-3">
         <table class="table table-striped table-hover">
         <thead>
           <tr>
@@ -61,6 +62,7 @@
           @endforeach
         </tbody>
       </table>
-        
+    </div>
+    </div>
     </div>
 @endsection

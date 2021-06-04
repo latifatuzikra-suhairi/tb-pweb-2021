@@ -18,31 +18,11 @@ class MahasiswaController extends Controller
      */
     public function index()
     {   
-        // $mahasiswa = Mahasiswa::paginate(10);
-        // return view('admin.mahasiswa.index', ['data_mahasiswa' => $mahasiswa], ['data_mahasiswa' => DB::table('mahasiswa')->paginate(15)]);
-
         $data_mahasiswa = DB::table('mahasiswa')
                     -> join ('users',  'users.id', '=', 'mahasiswa.id')
                     ->select('mahasiswa.nama', 'mahasiswa.email', 'users.password', 'mahasiswa.nim', 'mahasiswa.id')
                     ->paginate(10);
         return view('admin.mahasiswa.index', ['data_mahasiswa' => $data_mahasiswa]);
-    }
-
-    public function jumlah()
-    {
-        $jumlahMahasiswa = Mahasiswa::all();
-        $jumlahKelas = Kelas::all();
-        //$jumlahPertemuan = Pertemuan::all();
-        
-
-        return view('admin.dashboard', 
-        ['jumlahMahasiswa' => $jumlahMahasiswa],  
-        ['jumlahKelas' => $jumlahKelas],
-        // ['jumlahpertemuan' => $jumlahPertemuan],
-        
-        );
-        //$jumlahMahasiswa = DB::table('mahasiswa')->count();
-    
     }
 
     /**
@@ -103,15 +83,6 @@ class MahasiswaController extends Controller
         //
     }
 
-    // public function push($mahasiswa_id)
-    // {
-    //     dd($mahasiswa_id);
-    //     $mahasiswa = DB::table('pertemuan')
-    //                                ->get();
-
-    //     return view('admin.mahasiswa.index', compact($mahasiswa));
-    // }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -143,14 +114,10 @@ class MahasiswaController extends Controller
             'nama' => 'required',
             'nim' => 'required|unique:users,username,'.$u->id.',id', 
             'email' => 'required|unique:users,email,'.$u->id.',id', 
-            //'tipe' => 'required',
-            // 'password' => 'required',
         ], [
             'nama.required' => 'Nama tidak boleh kosong',
             'nim.required' => 'NIM tidak boleh kosong',
             'email.required' => 'Email tidak boleh kosong',
-            //'tipe.required' => 'Tipe tidak boleh kosong',
-            // 'password.required' => 'Password tidak boleh kosong',
         ]);
 
         if($request->isMethod('post')){
@@ -169,21 +136,11 @@ class MahasiswaController extends Controller
             $mahasiswa->nim = $data_mahasiswa['nim'];
             $mahasiswa->email = $data_mahasiswa['email'];
             $mahasiswa->save();
-            // $users->push();
 
-
-            //$user->mahasiswa()->where('id', $id)->update(['name'=>$data_mahasiswa['nama'], 'username'=>$data_mahasiswa['nim'], 'email'=>$data_mahasiswa['email'],'nama'=>$data_mahasiswa['nama'], 'nim'=>$data_mahasiswa['nim'], 'email'=>$data_mahasiswa['email']]);
-            //Mahasiswa::where(['id'=> $id])->update(['nama'=>$data_mahasiswa['nama'], 'nim'=>$data_mahasiswa['nim'], 'email'=>$data_mahasiswa['email']]);
             return redirect('/mahasiswa')->with('status', 'Data Mahasiswa Berhasil Diubah');
         }
         
     }
-
-    // public function edit(Request $request, $mahasiswa_id)
-    // {
-        
-    // }
-
 
     /**
      * Remove the specified resource from storage.

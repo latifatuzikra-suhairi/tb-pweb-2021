@@ -19,21 +19,11 @@
     </nav>
     <div style="border: 2px solid #001136; margin-top:-20px"></div>
 </div>
-
 @endsection
-
-@if (session('status'))
-        <br>
-            <div class="alert alert-success">
-                {{ session('status')}}
-            </div>
-        @endif 
 
 @section('content')
     <div class="container mt-4">
         <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
-
-        <!---- Detail Daftar Kelas ---->
         <div class="color: #001136">
             <h3><b>{{ $data_kelas->nama_makul }}</b></h3>
             <p class="fs-2">- {{ $data_kelas->kode_makul }}</p>
@@ -52,6 +42,7 @@
         </div>
         @endif
         
+        <!---- Detail Daftar Kelas ---->
         <div class="mt-2 border-top">
             <table class="table table-borderless" style="width:70%">
                 <tr>
@@ -61,7 +52,7 @@
                     <td></td>
                     <td>Semester</td>
                     <td>:</td>
-                    @if($data_kelas->semester == 1)
+                    @if($data_kelas->semester % 2 !== 0)
                         <td>{{ "Ganjil" }}</td>
                     @else
                         <td>{{ "Genap" }}</td>
@@ -97,15 +88,15 @@
                 <div class="card-body" style="background-color: rgb(237,241,245, 0.6)">
                     <form action="/kelas/{{$data_kelas->kelas_id}}/store" method="post">
                         @csrf
-                        <select name="mahasiswa_id" class="form-select form-select-sm" aria-label=".form-select-sm example"> 
+                        <select name="mahasiswa_id" class="form-select form-select-md" aria-label=".form-select-md example"> 
                         <option value="" hidden>-- Pilih Mahasiswa --</option>
                         @forelse ($non_peserta as $mhs)
-                            <option value="{{$mhs->mahasiswa_id}}">{{$mhs->nama}}</option>
+                            <option value="{{$mhs->mahasiswa_id}}">{{$mhs->nim}} - {{$mhs->nama}}</option>
                         @empty
-                            <option value="" disabled>Seluruh Mahasiswa Terdaftar</option>
+                            <option value="" disabled>Seluruh Mahasiswa Telah Terdaftar</option>
                         @endforelse
                         </select>
-                        <button class="btn btn-primary" type="submit">Tambah Peserta</button>
+                        <button class="btn btn-primary ml-2" type="submit">Tambah Peserta</button>
                     </form>
                     
                     <div class="table-responsive">
@@ -118,32 +109,35 @@
                                 <th class="text-center" scope="col">Kelola</th>
                             </tr>
                         </thead>
-                        @foreach ($data_mhs as $mhs)
+                        @foreach ($data_mhs as $index => $mhs)
                         <tbody>
                             <tr style="font-size: 16px;">
-                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $index + $data_mhs->firstItem() }}</td>
                                 <td>{{ $mhs->nama }}</td>
                                 <td>{{ $mhs->nim }}</td>
-                                <td>
-                                <a href="#" class="btn btn-danger" data-toggle="modal" data-target="#ModalDelete{{$mhs->mahasiswa_id}}">Hapus</a>
+                                <td class="text-center">
+                                <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#ModalDelete{{$mhs->mahasiswa_id}}">Hapus</a>
                                 </td>
                             </tr>
                             @include('admin.kelas.deletemahasiswa')
                         </tbody>
                         @endforeach
                     </table>
-                    <div>
-                        Showing
-                        {{$data_mhs->firstItem()}}
-                        to
-                        {{$data_mhs->lastItem()}}
-                        of
-                        {{$data_mhs->total()}}
-                        entries
+                    <div class="row">
+                        <div class="col-6 mb-2">
+                            Showing
+                            {{$data_mhs->firstItem()}}
+                            to
+                            {{$data_mhs->lastItem()}}
+                            of
+                            {{$data_mhs->total()}}
+                            entries
+                        </div>
+                        <div class="col-6 pagination pagination-sm justify-content-end">
+                            {{ $data_mhs->links('pagination::bootstrap-4') }}
+                        </div>
                     </div>
-                    <div>
-                        {{ $data_mhs->links('pagination::bootstrap-4') }}
-                    </div>
+
                     </div>
                 </div>
             </div>

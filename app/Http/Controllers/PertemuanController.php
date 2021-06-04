@@ -18,15 +18,19 @@ class PertemuanController extends Controller
         $kelas = Kelas::findOrFail($kelas_id);
         $pertemuan = Pertemuan::findOrFail($pertemuan_id);
 
-        $hadir = Mahasiswa::join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
-                            ->join('absensi', 'krs.krs_id', '=', 'absensi.krs_id')
-                            ->where('absensi.pertemuan_id', '=', $pertemuan_id)
-                            ->where('krs.kelas_id', '=', $kelas_id)
-                            ->get();
-        
-        // $absen = Absensi::rightjoin('krs')
+        $absensi = Mahasiswa::select('mahasiswa.nama', 'absensi.*')
+                            ->join('krs', 'krs.mahasiswa_id', '=', 'mahasiswa.mahasiswa_id')
+                            ->join('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                            ->join('pertemuan', 'pertemuan.kelas_id', '=', 'kelas.kelas_id')
+                            ->leftjoin('absensi', function ($query){
+                                $query->on('absensi.pertemuan_id', '=', 'pertemuan.pertemuan_id');
+                                $query->on('absensi.krs_id', '=', 'krs.krs_id');
+                            })
+                            ->where('krs.kelas_id', $kelas_id)
+                            ->where('pertemuan.pertemuan_id', $pertemuan_id)
+                            ->paginate(10);
 
-        return view('admin.pertemuan.detail', compact('hadir', 'kelas', 'pertemuan'));
+        return view('admin.pertemuan.detail', compact('absensi', 'kelas', 'pertemuan'));
     }
 
 
@@ -93,81 +97,87 @@ class PertemuanController extends Controller
         ]);
 
         $getFile = $request->file('file');
-
         $fileName = $getFile->getClientOriginalName();
         $ekstensiFile = explode('.', $fileName);
         $ekstensiFile = strtolower(end($ekstensiFile));
 
         $filePath = $getFile->getRealPath();
+        $fileSize = $getFile->getSize();
 
         if($ekstensiFile == "csv"){
-            $file = fopen($filePath, 'r');
-                $lineStart = 1;
-                $skipLines = 7;
-                while(fgetcsv($file)){
-                    if($lineStart > $skipLines){
-                        break;
+            if($fileSize > 0){
+                $file = fopen($filePath, 'r');
+                    $lineStart = 1;
+                    $skipLines = 7;
+                    while(fgetcsv($file)){
+                        if($lineStart > $skipLines){
+                            break;
+                        }
+                        $lineStart++;
                     }
-                    $lineStart++;
-                }
 
-                $data = array();
-                $row = 0;
-                while(($cols = fgetcsv($file, 1000, ";"))!== FALSE){
-                    $num = count($cols);
-                    $num--;
-                    for ($c = 0 ; $c < $num ; $c++){
-                        if ($c == 1) {
-                            $data[$row][$c] = explode(",", $cols[$c]);
-                                if ($c == 1) {
+                    $data = array();
+                    $row = 0;
+                    while(($cols = fgetcsv($file, 1000, ";"))!== FALSE){
+                        $num = count($cols);
+                        $num--;
+                        for ($c = 0 ; $c < $num ; $c++){
+                            if ($c == 1) {
+                                $data[$row][$c] = explode(",", $cols[$c]);
+                                    if ($c == 1) {
+                                        $data[$row][$c] = explode(" ", $cols[$c]);
+                                    }
+                            }
+                            if ($c == 2) {
+                                $data[$row][$c] = explode(",",$cols[$c]);
+                                if ($c == 2) {
                                     $data[$row][$c] = explode(" ", $cols[$c]);
                                 }
-                        }
-                        if ($c == 2) {
-                            $data[$row][$c] = explode(",",$cols[$c]);
-                            if ($c == 2) {
-                                $data[$row][$c] = explode(" ", $cols[$c]);
                             }
+
+                            $data[$row][] = $cols[$c];
                         }
-
-                        $data[$row][] = $cols[$c];
+                        $row++;
                     }
-                    $row++;
-                }
-                $check = count ($data);
-                
-                foreach ($data as $dt) {
+                    $check = count ($data);
+                    
+                    foreach ($data as $dt) {
 
-                    $cek = DB::table('krs')
-                            ->join('mahasiswa', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
-                            ->join('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
-                            ->where('kelas.kelas_id', $kelas_id)
-                            ->where('mahasiswa.email', $dt[5])
-                            ->get('krs.krs_id');
+                        $cek = DB::table('krs')
+                                ->join('mahasiswa', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
+                                ->join('kelas', 'kelas.kelas_id', '=', 'krs.kelas_id')
+                                ->where('kelas.kelas_id', $kelas_id)
+                                ->where('mahasiswa.email', $dt[5])
+                                ->get('krs.krs_id');
 
-                    $jml = count($cek);
+                        $jml = count($cek);
 
-                    $durasi=(strtotime($dt[2][1])-strtotime($dt[1][1]));
+                        $durasi=(strtotime($dt[2][1])-strtotime($dt[1][1]));
 
-                    if($jml > 0){
+                        if($jml > 0){
 
-                        foreach ($cek as $c) {
+                            foreach ($cek as $c) {
 
-                            Absensi::firstOrCreate([
-                                'krs_id' => $c->krs_id,
-                                'pertemuan_id' => $pertemuan_id,
-                                'jam_masuk' => $dt[1][1],
-                                'jam_keluar' =>$dt[2][1],
-                                'durasi' => (int)$durasi
-                            ]);
+                                Absensi::firstOrCreate([
+                                    'krs_id' => $c->krs_id,
+                                    'pertemuan_id' => $pertemuan_id,
+                                    'jam_masuk' => $dt[1][1],
+                                    'jam_keluar' =>$dt[2][1],
+                                    'durasi' => (int)$durasi
+                                ]);
+
+                            }
 
                         }
-
                     }
-                }
-                return redirect()->back();
-        } else {
-            return redirect()->back()->with('alertImport', 'Upload File dengan Ekstensi .csv');
+                    return redirect()->back()->with('psn_sukses', 'File pertemuan berhasil diimport!');
+            }
+            else{
+                return redirect()->back()->with('psn_gagal', 'File Kosong!');
+            }
+        } 
+        else {
+            return redirect()->back()->with('psn_gagal', 'Upload File dengan Ekstensi .csv');
         }    
     }
 

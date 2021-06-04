@@ -15,21 +15,21 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-10 info-panel shadow-lg rounded p-3" style="background-color: white; margin-top: -90px;">
-            <div class="row">
+            <div class="row pt-1">
                 <div class="col-lg">
                     <img src="img/read.png" alt="mahasiswa" class="float-left mr-3 mb-3">
                     <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">MAHASISWA</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Total: {{$jumlahMahasiswa->count()}} mahasiswa</p>
+                    <p style=" font-size: 14px; color: #1a3f92;">Total: {{$jumlahMahasiswa}} mahasiswa</p>
                 </div>
                 <div class="col-lg">
                     <img src="img/book.png" alt="kelas" class="float-left mr-3 mb-3">
                     <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">KELAS</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Banyak Kelas: {{$jumlahKelas->count()}} kelas</p>
+                    <p style=" font-size: 14px; color: #1a3f92;">Total: {{$jumlahKelas}} kelas</p>
                 </div>
                 <div class="col-lg">
                     <img src="img/appointment.png" alt="pertemuan" class="float-left mr-3 mb-3">
                     <h4 class="font-weight-bold mt-2" style="font-size: 16px; color: #001950;">PERTEMUAN</h4>
-                    <p style=" font-size: 14px; color: #1a3f92;">Pertemuan Ke-6</p>
+                    <p style=" font-size: 14px; color: #1a3f92;">Total: {{ $jumlahPertemuan }} pertemuan</p>
                 </div>
             </div>
         </div>

@@ -17,24 +17,29 @@ class KelasController extends Controller
      */
     public function index()
     {
-        $data_kelas = Kelas::orderby('tahun','desc')->orderby('semester','desc')->paginate(5);
+        $data_kelas = Kelas::orderby('tahun','desc')->orderby('semester','desc')->paginate(10);
         return view('admin.kelas.index', ['data_kelas' => $data_kelas]);
     }
 
 
     public function store_peserta(Request $request, $id){
-        $request->request->add(['kelas_id' => $id]);
-        Krs::create([
-            'kelas_id' => $request->kelas_id,
-            'mahasiswa_id' => $request->mahasiswa_id,
-        ]);
-        return redirect()->back();
+        if($request->mahasiswa_id == null){
+            return redirect()->back()->with('psn_gagal', 'Silahkan Pilih Peserta Kelas Yang Ingin Ditambahkan!');
+        }
+        else{
+            $request->request->add(['kelas_id' => $id]);
+            Krs::create([
+                'kelas_id' => $request->kelas_id,
+                'mahasiswa_id' => $request->mahasiswa_id,
+            ]);
+            return redirect()->back()->with('psn_sukses', 'Anda Berhasil Menambahkan Peserta Kelas!');
+        }
     }
 
     public function hapus_peserta($krs_id)
     {
         $peserta = Krs::where('krs_id',$krs_id)->delete();
-        return redirect()->back()->with('status', 'Data Peserta Berhasil Dihapus');
+        return redirect()->back()->with('psn_sukses', 'Data Peserta Berhasil Dihapus');
     }
 
     /**
@@ -77,10 +82,10 @@ class KelasController extends Controller
         ->doesntExist();
         if($cekkelas == true){
             Kelas::create($request->all());
-            return redirect('/kelas')->with('status', 'Data Kelas Berhasil Ditambahkan !');
+            return redirect('/kelas')->with('psn_sukses', 'Data Kelas Berhasil Ditambahkan !');
             
         }else{
-            return redirect('/kelas')->with('status', 'Data Kelas Gagal Ditambahkan !');
+            return redirect('/kelas')->with('psn_gagal', 'Data Kelas Gagal Ditambahkan !');
         }
         
     }
@@ -93,7 +98,7 @@ class KelasController extends Controller
      */
     public function show($kelas_id)
     {
-        $data_kelas = Kelas::findOrFail($kelas_id);
+        $data_kelas = Kelas::find($kelas_id);
         $data_pert = Pertemuan::where('kelas_id', $kelas_id)
                                 ->orderBy('pertemuan_ke', 'asc')
                                 ->get();
@@ -103,18 +108,15 @@ class KelasController extends Controller
                                     ->where('krs.kelas_id', $kelas_id)
                                     ->select('mahasiswa.mahasiswa_id','mahasiswa.nama', 'mahasiswa.nim')
                                     ->paginate(5);
-        
-        $peserta = Mahasiswa::join('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
-                            ->where('krs.kelas_id', $kelas_id)
-                            ->select('mahasiswa.mahasiswa_id')
-                            ->get()->toArray();
-                                    
-        $non_peserta = Mahasiswa::leftjoin('krs', 'mahasiswa.mahasiswa_id', '=', 'krs.mahasiswa_id')
-                                ->whereNotIn('mahasiswa.mahasiswa_id', $peserta)
-                                ->select('mahasiswa.mahasiswa_id', 'mahasiswa.nama', 'mahasiswa.nim', 'krs.krs_id')
-                                ->get();
 
-        return view('admin.kelas.detail', compact('data_kelas', 'data_pert','data_mhs', 'non_peserta')); 
+        $non_peserta = Mahasiswa::select('mahasiswa.mahasiswa_id', 'mahasiswa.nama', 'mahasiswa.nim')
+                                ->whereNotIn('mahasiswa.mahasiswa_id', function($query) use($kelas_id, $data_kelas){
+                                    $query->select('krs.mahasiswa_id')->from('krs')
+                                          ->join('kelas', 'krs.kelas_id', '=', 'kelas.kelas_id')
+                                          ->where('kelas.kode_makul', $data_kelas->kode_makul);
+                                })
+                                ->get();
+        return view('admin.kelas.detail', compact('data_kelas', 'data_pert', 'data_mhs', 'non_peserta')); 
     }
 
     /**
@@ -139,15 +141,11 @@ class KelasController extends Controller
     public function update(Request $request, $kelas_id)
     {
         $request->validate([
-            'kode_kelas' => 'required',
-            'kode_makul' => 'required',
             'nama_makul' => 'required',
             'tahun' => 'required',
             'semester' => 'required',
             'sks' => 'required',
         ], [
-            'kode_kelas.required' => 'Kode Kelas tidak boleh kosong',
-            'kode_makul.required' => 'Kode Makul tidak boleh kosong',
             'nama_makul.required' => 'Nama Makul tidak boleh kosong',
             'tahun.required' => 'Tahun tidak boleh kosong',
             'semester.required' => 'Semester tidak boleh kosong',
@@ -156,9 +154,8 @@ class KelasController extends Controller
 
         if($request->isMethod('post')){
             $data_kelas = $request->all();  
-
             Kelas::where(['kelas_id'=> $kelas_id])->update(['kode_kelas'=>$data_kelas['kode_kelas'], 'kode_makul'=>$data_kelas['kode_makul'], 'nama_makul'=>$data_kelas['nama_makul'], 'tahun'=>$data_kelas['tahun'], 'semester'=>$data_kelas['semester'], 'sks'=>$data_kelas['sks']]);
-            return redirect('/kelas')->with('status', 'Data Kelas Berhasil Diubah');
+            return redirect('/kelas')->with('psn_sukses', 'Data Kelas Berhasil Diubah');
             }
     }
 
@@ -172,6 +169,6 @@ class KelasController extends Controller
     {
         $data_kelas = Kelas::find($kelas_id);
         $data_kelas->delete();
-        return redirect('/kelas')->with('status', 'Data Kelas Berhasil Dihapus');
+        return redirect('/kelas')->with('psn_sukses', 'Data Kelas Berhasil Dihapus');
     }
 }

@@ -2,20 +2,37 @@
 <style>
 @media (min-width: 992px) { 
     .navbar{
-        background-color: #001543;
+        background-color: #001136;
     }
 }
 </style>
 @section('title', 'SIRAH | Kelas')
 
+@section('breadcrumbs')
+<div style="background-color: white; margin-top:-5px"> 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb container" style="background-color: white">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/kelas">Kelas</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Tambah Kelas</li>
+        </ol>
+    </nav>
+    <div style="border: 2px solid #001136; margin-top:-20px"></div>
+</div>
+@endsection
+
 @section('content')
-    <div class="container">
+    <div class="container mt-4">
       <div class="row">
         <div class="col-8">
-        <h1 class="mt-2">Tambah Kelas</h1>
- 
-        <br>
-        <div class="card mb-4">
+        
+        <div class="wrap container shadow p-5" style="background-color:white; border-radius:10px">
+            <div class="color: #001136">
+                <h3 class="mb-2"><b>Tambah Kelas</b></h3>
+                    <div class="batas"></div>
+            </div>
+            
+        <div class="card mt-3">
         <div class="card-body">
         <form action="/kelas/store" method="POST">
                         @csrf
@@ -72,10 +89,11 @@
                            
                 <button type="submit" class="btn btn-primary">Tambah Data</button>
                 </form>  
-        </div>
-        </div>
+            </div>
+            </div>
         </div>
         </div>
     </div>
+</div>
 
 @endsection

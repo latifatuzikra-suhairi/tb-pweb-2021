@@ -59,7 +59,7 @@
             Daftar Hadir Mahasiswa
         </div>
         <div class="card-body">
-            @if (count($errors) > 0 )
+            @if (count($errors) > 0)
             <div class="alert alert-danger">
                 <strong>Whoops!</strong> Terdapat Masalah Pada File Anda!
                 <ul>
@@ -69,14 +69,21 @@
                 </ul>
             </div>
             @endif
-
-            @if (session('alertImport'))
-                <div class="alert alert-danger">
-                    <strong>Whoops!</strong> Terdapat Masalah Pada File Anda!
-                    <li>{{ session('alertImport')}}</li>
+            
+            @if ($message = Session::get('psn_gagal'))
+                <div class="alert alert-danger mt-3 alert-block" role="alert">
+                    <button type="button" class="close" data-dismiss="alert">×</button>
+                    <strong>{{ $message }}</strong>
                 </div>
             @endif 
 
+            @if($message = Session::get('psn_sukses'))
+            <div class="alert alert-success mt-3 alert-block" role="alert">
+                <button type="button" class="close" data-dismiss="alert">×</button>
+                <strong>{{ $message }}</strong>
+            </div>
+            @endif
+                
             <form method="POST" enctype="multipart/form-data" action="{{ route('upload.pertemuan', [$kelas->kelas_id, $pertemuan->pertemuan_id]) }}">
                 @csrf
                 <div class="form-group table-responsive">
@@ -103,35 +110,47 @@
                     <th scope="col">Durasi</th>
                     </tr>
                 </thead>
+            @foreach ($absensi as $index => $data)
                 <tbody>
-                    @foreach ($hadir as $data)
                     <?php
                         $jam = floor($data->durasi / 3600);
-                        $menit = floor(($data->durasi / 60) % 60);
-                        $detik = $data->durasi % 60;
-                    ?>
+                        $menit = floor((($data->durasi)-($jam*3600))/60);
+                        $detik = floor(($data->durasi)-($jam*3600)-($menit*60));
+                    ?> 
                     <tr style="font-size: 16px">
-                        <td scope="row" class="text-center">{{ $loop->iteration }}</td>
+                        <td scope="row" class="text-center">{{ $index + $absensi->firstItem() }}</td>
                         <td>{{ $data->nama }}</td>
-                        @if ($data->absensi_id == null)
-                            <td>{{ "Tidak Hadir" }}</td>
+                        @if ($data->durasi == null)
+                            <td>Tidak Hadir</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>0h 0m 0s</td>
                         @else
-                            <td>{{ "Hadir" }}</td> 
-                        @endif
-                        @if($data->durasi!=0)
-                            <td>{{ $data->jam_masuk}}</td>
-                            <td>{{ $data->jam_keluar }}</td>
+                            <td>Hadir</td> 
+                            <td>{{$data->jam_masuk}}</td>
+                            <td>{{$data->jam_keluar}}</td>
                             <td>{{$jam}}h {{$menit}}m {{$detik}}s</td>
-                        @else
-                            <td>{{ "-" }}</td>
-                            <td>{{ "-" }}</td>
-                            <td>{{ "-" }}</td>
-                        @endif  
+                        @endif
                     </tr>
-                    @endforeach
                 </tbody>
+            @endforeach
             </table>
+
+            <div class="row">
+                <div class="col-6 mb-2">
+                    Showing
+                    {{$absensi->firstItem()}}
+                    to
+                    {{$absensi->lastItem()}}
+                    of
+                    {{$absensi->total()}}
+                    entries
+                </div>
+                <div class="col-6">
+                {{ $absensi->links('pagination::bootstrap-4') }}
+                </div>
             </div>
+        </div>
     </div>
     </div>
     </div>

@@ -30,5 +30,14 @@ class HomeController extends Controller
         return view('home');
     }
 
+    public function jumlah()
+    {
+        $jumlahMahasiswa = Mahasiswa::count();
+        $jumlahKelas = Kelas::count();
+        $jumlahPertemuan = Pertemuan::count();
+        
+        return view('admin.dashboard', compact('jumlahMahasiswa', 'jumlahKelas', 'jumlahPertemuan'));
+    
+    }
     
 }
