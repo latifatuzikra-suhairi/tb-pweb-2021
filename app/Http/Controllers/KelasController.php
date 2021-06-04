@@ -31,10 +31,10 @@ class KelasController extends Controller
         return redirect()->back();
     }
 
-    public function hapus_peserta($mahasiswa_id)
+    public function hapus_peserta($krs_id)
     {
-       
-
+        $peserta = Krs::where('krs_id',$krs_id)->delete();
+        return redirect()->back()->with('status', 'Data Peserta Berhasil Dihapus');
     }
 
     /**
@@ -71,8 +71,18 @@ class KelasController extends Controller
             'sks.required' => 'Sks tidak boleh kosong',
         ]);
 
-        Kelas::create($request->all());
-        return redirect('/kelas')->with('status', 'Data Kelas Berhasil Ditambahkan');
+        $cekkelas = Kelas::where('kode_kelas', $request->kode_kelas)
+        ->where('kode_makul',$request->kode_makul)
+        ->where('tahun', $request->tahun)
+        ->doesntExist();
+        if($cekkelas == true){
+            Kelas::create($request->all());
+            return redirect('/kelas')->with('status', 'Data Kelas Berhasil Ditambahkan !');
+            
+        }else{
+            return redirect('/kelas')->with('status', 'Data Kelas Gagal Ditambahkan !');
+        }
+        
     }
 
     /**

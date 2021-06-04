@@ -21,13 +21,13 @@
         <form action="/kelas/{{ $data_kelas->kelas_id }}/update" method="POST">
                         @csrf
                         <div class="form-group">
-                        <label for="kode_kelas">Kode Kelas</label>
-                        <input type="text" class="form-control @error('kode_kelas') is-invalid @enderror" placeholder="Masukkan Kode Kelas" id="kode_kelas" name="kode_kelas" value="{{ $data_kelas->kode_kelas }}"> 
+                        <label for="kode_kelas">Kode Kelas</label> disabled
+                        <input type="text" class="form-control @error('kode_kelas') is-invalid @enderror" placeholder="Masukkan Kode Kelas" id="kode_kelas" name="kode_kelas" value="{{ $data_kelas->kode_kelas }}" disabled> 
                         @error ('kode_kelas')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
                     <div class="form-group">
                         <label for="kode_makul">Kode Makul</label>
-                        <input type="text" class="form-control @error('kode_makul') is-invalid @enderror" placeholder="Masukkan Kode Makul" id="kode_makul" name="kode_makul" value="{{ $data_kelas->kode_makul }}"> 
+                        <input type="text" class="form-control @error('kode_makul') is-invalid @enderror" placeholder="Masukkan Kode Makul" id="kode_makul" name="kode_makul" value="{{ $data_kelas->kode_makul }}" disabled> 
                         @error ('kode_makul')<div class="invalid-feedback">{{ $message }}</div>@enderror
 
                     </div>
